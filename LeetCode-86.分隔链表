@@ -1,0 +1,43 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* partition(struct ListNode* head, int x) {
+    struct ListNode *Start = head, *little = NULL, *large = NULL, *lit = NULL, *lar = NULL;
+
+    while (Start != NULL) {
+        if (Start->val >= x) {
+            if (lar != NULL) {
+                lar->next = Start;
+            } else {
+                large = Start;
+            }
+            lar = Start;
+        } else {
+            if (lit != NULL) {
+                lit->next = Start;
+            } else {
+                little = Start;
+            }
+            lit = Start;
+        }
+        Start = Start->next;
+    }
+
+    if (lar != NULL) {
+        lar->next = NULL; 
+    }
+    if (lit != NULL) {
+        lit->next = large; 
+    }
+
+    return little ? little : large; 
+}
+
+作者：Frottenice
+链接：https://leetcode.cn/problems/partition-list/solutions/2991899/fen-qu-liang-bian-by-frottenice-dyn0/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

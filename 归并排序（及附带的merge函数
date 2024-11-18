@@ -1,0 +1,26 @@
+ struct ListNode* merge(struct ListNode*A,struct ListNode *B)
+ {
+    if(!A && B) return B;
+    if(!B && A) return A;
+    if(!A && !B) return NULL;
+    if(A->val>B->val){
+        B->next=merge(A,B->next);
+        return B;
+    }else{
+        A->next=merge(A->next,B);
+        return A;
+    }
+ }
+struct ListNode* sortList(struct ListNode* head) {
+    if(head==NULL || head->next==NULL)  return head;
+    struct ListNode*prev=NULL,*slow=head,*fast=head;
+    while(fast!=NULL&&fast->next!=NULL)
+    {
+        prev=slow;
+        slow=slow->next;
+        fast=fast->next->next;
+    }
+    prev->next=NULL;
+    struct ListNode*left=sortList(head),*right=sortList(slow);
+    return merge(left,right);
+}

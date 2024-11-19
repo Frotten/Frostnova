@@ -1,0 +1,35 @@
+ struct ListNode* reverseList(struct ListNode* head) {
+    if(!head) return head;
+    struct ListNode*prev=NULL,*next=NULL,*temp=head;
+    while(temp!=NULL)
+    {
+        next=temp->next;
+        temp->next=prev;
+        prev=temp;
+        temp=next;
+    }
+    return prev;
+}
+bool isPalindrome(struct ListNode* head) {
+    if(head==NULL||head->next==NULL) return true;
+    struct ListNode* temp=head;
+    struct ListNode* pre=NULL,*fast=head,*slow=head;
+    while(fast!=NULL&&fast->next!=NULL)
+    {
+        pre=slow;
+        slow=slow->next;
+        fast=fast->next->next;
+    }
+    pre->next=NULL;
+    slow=reverseList(slow);
+    while(temp!=NULL)
+    {
+        if(temp->val!=slow->val)
+        {
+            return false;
+        }
+        temp=temp->next;
+        slow=slow->next;
+    }
+    return true;
+}

@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct Stu {
+	char name[10];
+	int score;
+}student;
+int compar(const void* a, const void* b)
+{
+	student *studenA = (student*)a;
+	student* studenB = (student*)b;
+	return studenB->score - studenA->score;
+}
+int main()
+{
+	student studen[] = {
+		{"Alice", 85},
+		{"Bob", 78},
+		{"Charlie", 92},
+		{"David", 65},
+		{"Eve", 70}
+	};
+	qsort(studen, 5, sizeof(student), compar);
+	for (int i = 1; i <= 5; i++)
+		printf("第%d : %d %s\n", i, studen[i - 1].score, studen[i - 1].name);//qsort排序
+
+	return 0;
+}

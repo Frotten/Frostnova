@@ -1,0 +1,14 @@
+#include <stdio.h>
+int main()
+{
+	char s1[15] = "Computer";
+	char s2[12] = "Youdian";
+	char s3[5] = "STA";
+	FILE* p = fopen("txt.txt", "r+");
+	fwrite(s2, 1, 7, p);
+	fwrite(s3, 1, 3, p);
+	fseek(p, 0L, SEEK_SET);
+	fwrite(s1, 1, 3, p);
+	fclose(p);
+	return 0;
+}

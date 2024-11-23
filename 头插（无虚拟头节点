@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct Node {
+	int data;
+	struct Node* next;
+}LNode,*LinkList;
+int main()
+{
+	LinkList H = (LinkList)malloc(sizeof(LNode));
+	H->next = NULL;
+	LNode* s;
+	int x;
+	scanf("%d", &x);
+	while (x != -1)
+	{
+		LinkList s = (LinkList)malloc(sizeof(LNode));
+		s->data = x;
+		s->next = H;
+		H = s;
+		scanf("%d", &x);
+	}
+	while (H->next != NULL)
+	{
+		printf("%d ", H->data);
+		H = H->next;
+	}
+	return 0;
+}

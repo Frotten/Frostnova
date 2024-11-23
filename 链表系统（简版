@@ -1,0 +1,243 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct character {
+	int level;
+	char name[20];
+	char element[20];
+	struct character* next;
+}Jue;
+Jue* creat(int level, char*element, char* name)
+{
+	Jue* New = (Jue*)malloc(sizeof(Jue));
+	New->level = level;
+	strcpy(New->element, element);
+	strcpy(New->name, name);
+	New->next = NULL;
+	return New;
+}
+Jue* creatlocation(Jue** head, Jue** early, int location)
+{
+	char name[20] = { 0 };
+	char element[10] = { 0 };
+	int level = 0;
+	scanf("%s %s %d", name, element, &level);
+	Jue* Now = creat(level, element, name);
+	Jue* Temp = *head;
+	int count = 1;
+	while (count < location)
+	{
+		early = Temp;
+		Temp = Temp->next;
+		count++;
+		if (Temp == NULL)
+		{
+			printf("Have no found");
+			return NULL;
+		}
+	}
+	if (location == 1)
+	{
+		*head = Now;
+		Now->next = Temp;
+		return;
+	}
+	(*early)->next = Now;
+	Now->next = Temp;
+	early = NULL;
+	Temp = NULL;
+}
+void delet(Jue** head, Jue** early, char* name)
+{
+	Jue* temp = *head, * earl = NULL;
+	while (strcmp(temp->name, name))
+	{
+		earl = temp;
+		temp = temp->next;
+	}
+	if (!strcmp(temp->name, name))
+	{
+		if (earl == NULL)
+		{
+			(*head) = temp->next;
+			temp = NULL;
+		}
+		else
+		{
+			earl->next = temp->next;
+			free(temp);
+			temp = NULL;
+		}
+
+	}
+	else {
+		printf("Have no found\n");
+	}
+}
+void change(char* name, Jue** head)
+{
+	Jue* temp = *head, * earl = NULL;
+	while (strcmp(temp->name, name))
+	{
+		earl = temp;
+		temp = temp->next;
+		if (temp == NULL)
+		{
+			printf("No any element there\n");
+			return;
+		}
+	}
+	if (!strcmp(temp->name, name))
+	{
+		char Nname[20];
+		char Nelement[10];
+		int Nlevel;
+		scanf("%s %s %d", Nname, Nelement, &Nlevel);
+		strcpy(temp->name, Nname);
+		strcpy(temp->element, Nelement);
+		temp->level = Nlevel;
+	}
+	else {
+		printf("Have no found\n");
+	}
+}
+void search(Jue* head, char* name)
+{
+	Jue* temp = head, * earl = NULL;
+	if (temp == NULL)
+	{
+		printf("No any element there\n");
+		return;
+	}
+	while (strcmp(temp->name, name))
+	{
+		earl = temp;
+		temp = temp->next;
+		if (temp == NULL)
+		{
+			printf("No any element there\n");
+			return;
+		}
+	}
+	if (!strcmp(temp->name, name))
+	{
+		printf("%s %s %d\n", temp->name, temp->element, temp->level);
+	}
+	else {
+		printf("Have no found\n");
+	}
+}
+Jue*anti(Jue* head) 
+{
+	if (!head) return head;
+	Jue* prev = NULL, * next = NULL, * temp = head;
+	while (temp != NULL){
+		next = temp->next;
+		temp->next = prev;
+		prev = temp;
+		temp = next;
+	}
+    return prev;
+}
+int main()
+{
+	FILE* P = fopen("data.txt", "a");
+	fclose(P);
+	P = NULL;
+	Jue* head = NULL, * early = NULL, * Temp = NULL,*Now=NULL;
+	P = fopen("data.txt", "r");
+	while (1)
+	{
+		char name[20] = { 0 };
+		char element[10] = { 0 };
+		int level = 0;
+		while(fscanf(P, "%s %s %d ", name, element, &level) != EOF)
+		{
+			Jue* New = creat(level, element, name);
+			if (!head)
+				head = New;
+			else {
+				early->next = New;
+			}
+			early = New;
+		}
+		fclose(P);
+		int location = 0;
+		while (1)
+		{
+			printf("CHoose:");
+			int choose = -1;
+			scanf("%d", &choose);
+			if (!choose)
+				break;
+			switch (choose)
+			{
+			case 1:
+				scanf("%s %s %d", name, element, &level);
+				Now = creat(level, element, name);
+				if (!head)
+					head = Now;
+				else {
+					early->next = Now;
+				}
+				early = Now;
+				break;
+			case 2:
+				scanf("%d", &location);
+				Now = creatlocation(&head, &early, location);
+				if (!head)
+					head = Now;
+				else {
+					early->next = Now;
+				}
+				early = Now;
+				break;
+			case 3:
+				name[20];
+				scanf("%s", name);
+				delet(&head,&early,name);
+				break;
+			case 4:
+				name[20];
+				scanf("%s", name);
+				change(name, &head);
+				break;
+			case 5:
+				name[20];
+				scanf("%s", name);
+				search(head, name);
+				break;
+			case 6:
+				head = anti(head);
+				break;
+			}
+		}
+		break;
+	}
+	if (head == NULL)
+	{
+		FILE* P = fopen("data.txt", "w");
+		fclose(P);
+		P = NULL;
+		printf("No any chapter should be saved\n");
+		return 0;
+	}
+	P = fopen("data.txt", "w");
+	Temp = head;
+	while (1)
+	{
+		if (Temp == NULL)
+		{
+			printf("Save Over\n");
+			break;
+		}
+		else
+		{
+			fprintf(P, "%s %s %d ", Temp->name, Temp->element, Temp->level);
+			Temp = Temp->next;
+		}
+	}
+	fclose(P);
+	P = NULL;
+	return 0;
+}

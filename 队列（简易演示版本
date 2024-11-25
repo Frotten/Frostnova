@@ -1,0 +1,9 @@
+#include <stdio.h>//按照第一个元素被删除，第二个元素放在数组末尾，第三个元素被删除，第四个元素放在数组末尾的规律进行
+int main(){//该代码用于从前到后展示该队列中被删除的元素
+	int arr[20] = { 4,1,8,9,3,2,6,4,7 }, head = 0, tail = 9;
+	while (head < tail){
+		printf("%d ", arr[head++]);//打印出被删除的元素，然后head向后进位
+		arr[tail++] = arr[head++];//将此时head指向的元素放在数组末尾，然后head和tail向后进位
+	}
+	return 0;
+}

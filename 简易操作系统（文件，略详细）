@@ -1,0 +1,502 @@
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+typedef struct Rhode {
+	char name[10];
+	char Ability_move;
+	char Ability_defend;
+	char Ability_attack;
+	char Ability_control;
+	struct Rhode* next;
+}Rhodes;
+void menu()
+{
+	printf("*********************************************************\n");
+	printf("***** 1.创建档案 ***************** 2.查找档案 ***********\n");
+	printf("***** 3.删除档案 ***************** 4.修改档案 ***********\n");
+	printf("***** 5.插入档案 ***************** 6.打印档案 ***********\n");
+	printf("***** 7.打印菜单 ***************** 8.清空档案 ***********\n");
+	printf("***** 9.移动档案 ****************************************\n");
+	printf("*********************************************************\n");
+	printf("******************* 0.退出 ******************************\n");
+	printf("*********************************************************\n");
+}
+Rhodes* creatchapter(char Ability_move, char Ability_defend,char Ability_attack,char Ability_control,char* name)//创建档案
+{
+	Rhodes* New = (Rhodes*)malloc(sizeof(Rhodes));
+	New->Ability_attack = Ability_attack;
+	New->Ability_control = Ability_control;
+	New->Ability_defend = Ability_defend;
+	New->Ability_move = Ability_move;
+	strcpy(New->name, name);
+	New->next = NULL;
+	return New;
+}
+Rhodes* testchapter(char* name,const Rhodes*head)//查找档案
+{
+	Rhodes* now = head;
+	if (now == NULL)
+	{
+		printf("这里没有你要的人\n");
+		return NULL;
+	}
+	while (1)
+	{
+		if (!strcmp(now->name, name))
+			return now;
+		else
+			now = now->next;
+		if (now == NULL)
+		{
+			printf("这里没有你要的人\n");
+			return NULL;
+		}
+	}
+}
+void deletechapter(char* name, Rhodes** head)//删除档案
+{
+	Rhodes* now = *head;
+	Rhodes* early = NULL;
+	if (now == NULL)
+	{
+		printf("这里没有你要的人\n");
+		return;
+	}
+	while (1)
+	{
+		if (!strcmp(now->name, name))
+		{
+			if (early == NULL)
+				*head = now->next;
+			else
+				early->next = now->next;
+			free(now);
+			return;
+		}
+		else
+		{
+			early = now;
+			now = now->next;
+		}
+		if (now == NULL)
+		{
+			printf("这里没有你要的人\n");
+			return;
+		}
+	}
+}
+void changechapter(char* name, const Rhodes* head)//修改档案
+{
+	Rhodes* now = head;
+	Rhodes* temp = testchapter(name, now);
+	printf("请输入修改后的四项能力值（速，防，攻，智）\n");
+	char speed, defend, attack, intelligence;
+	scanf("%c %c %c %c", &speed, &defend, &attack, &intelligence);
+	getchar();
+	if (temp == NULL)
+		return;
+	else
+	{
+		temp->Ability_attack = attack;
+		temp->Ability_control = intelligence;
+		temp->Ability_defend = defend;
+		temp->Ability_move = speed;
+	}
+}
+void InsertChapter(Rhodes**head)//能在指定位置生成并插入角色档案
+{
+	Rhodes* Temp = *head, * early = NULL;
+	Rhodes* Now = NULL;
+	printf("想要在第几位插入什么人呢？(位置，速防力智名)\n");
+	int location = 0;
+	char move = 0, defend = 0, attack = 0, control = 0;
+	char name[10] = { 0 };
+	scanf("%d %c %c %c %c %s", &location, &move, &defend, &attack, &control, name);
+	getchar();
+	Now = creatchapter(move, defend, attack, control, name);
+	int count = 1;
+	while (count<location)
+	{
+		early = Temp;
+		Temp = Temp->next;
+		count++;
+	}
+	if (location == 1)
+	{
+		*head = Now;
+		Now->next = Temp;
+		return;
+	}
+	early->next = Now;
+	Now->next = Temp;
+	early = NULL;
+	Temp = NULL;
+}
+void MoveChapter(Rhodes** head)//我还缺一个能够改变档案位置的模组
+{
+	Rhodes* Temp = *head, * early = NULL;
+	Rhodes* Now = NULL;
+	printf("输入你要修改的名称和想要存放改节点的目标位置：");
+	int location = 0;
+	char name[15] = { 0 };
+	scanf("%s %d", name, &location);
+	getchar();
+	while (1)
+	{
+		if (!strcmp(Temp->name, name))
+		{
+			early->next = Temp->next;
+			break;
+		}
+		else
+		{
+			early = Temp;
+			Temp = Temp->next;
+		}
+		if (Temp == NULL)
+		{
+			printf("这里没有你要的人\n");
+			break;
+		}
+	}
+	Now = Temp;
+	Temp = *head;
+	int len = 0;
+	while (Temp != NULL)
+	{
+		Temp = Temp->next;
+		len++;
+	}
+	Temp = *head;
+	if (location > len)
+	{
+		printf("输入位置错误\n");
+		early = NULL;
+		Now = NULL;
+		Temp = NULL;
+		return;
+	}
+	if (Now != NULL)
+	{
+		int count = 2;
+		if (location == 1)
+		{
+			early = NULL;
+			*head = Now;
+			Now->next = Temp;
+			return;
+		}
+		else
+		{
+			while (count < location)
+			{
+				count++;
+				Temp = Temp->next;
+			}
+			Now->next = Temp->next;
+			Temp->next = Now;
+		}
+		early = NULL;
+		Now = NULL;
+		Temp = NULL;
+	}
+}
+void clearchapter(Rhodes** head)//清空档案
+{
+	Rhodes* temple = *head;
+	Rhodes* early = NULL;
+	while (1)
+	{
+		if (temple != NULL)
+		{
+			early = temple->next;
+			free(temple);
+			temple = early;
+		}
+		else
+		{
+			free(temple);
+			temple = NULL;
+			*head = NULL;
+			return;
+		}
+	}
+}
+void showchapter(const Rhodes *head,int count)//统统超飞（全部打印
+{
+	Rhodes* temp = head;
+	while (1)
+	{
+		if (head == NULL)
+		{
+			printf("There is no_one in your chapter\n");
+			return;
+		}
+		else if (temp == NULL)
+		{
+			printf("Print Over\n");
+			return;
+		}
+		else
+		{
+			printf("第%d位选手：", count);
+			printf("%c %c %c %c %s\n", temp->Ability_move, temp->Ability_defend, temp->Ability_attack, temp->Ability_control, temp->name);
+			count++;
+			temp = temp->next;
+		}
+	}
+}
+void InitializeChapter(Rhodes** head, Rhodes** early)//--------------初始化----------------二进制版本
+{
+	FILE* P = fopen("Panel.txt", "a");
+	fclose(P);
+	P = NULL;
+	P = fopen("Panel.txt", "rb");
+	if (P == NULL)
+	{
+		perror("Initialize");
+	}
+	while (1)
+	{
+		Rhodes Newly = { 0 };
+		if (fread(&Newly, sizeof(Rhodes), 1, P) == 1)
+		{
+			Rhodes* New = creatchapter(Newly.Ability_move, Newly.Ability_defend, Newly.Ability_attack, Newly.Ability_control, Newly.name);
+			if (*head == NULL)
+				*head = New;
+			else
+				(*early)->next = New;
+			(*early) = New;
+		}
+		else
+		{
+			printf("Initialize Correct\n");
+			fclose(P);
+			P = NULL;
+			return;
+		}
+	}
+}
+void Savechapter(const Rhodes*head)//-------------------------存档--------------------------------二进制版本
+{
+	if (head == NULL)
+	{
+		FILE* P = fopen("Panel.txt", "wb");
+		fclose(P);
+		P = NULL;
+		printf("No any chapter should be saved\n");
+		return;
+	}
+	FILE* P = fopen("Panel.txt", "wb");
+	if (P == NULL)
+	{
+		perror("Save");
+	}
+	Rhodes* Temp = head;
+	while (1)
+	{
+		if (Temp == NULL)
+		{
+			printf("Save Over\n");
+			break;
+		}
+		else
+		{
+			fwrite(Temp, sizeof(Rhodes), 1, P);
+			Temp = Temp->next;
+		}
+	}
+	fclose(P);
+	P = NULL;
+	return;
+}
+int main()
+{
+	char temple[20] = { 0 };
+	Rhodes* head = NULL;
+	Rhodes* last = NULL, * early = NULL;//early应该等于上一个结构体的next
+	InitializeChapter(&head, &early);//---------------------根据名单文件初始化链表-------------
+	//令last=last->next即可向后搜索
+	menu();//-------------------------------打印菜单--------------------------------
+	while (1)
+	{
+		printf("请选择：");
+		int a = -1;
+		scanf("%d", &a);
+		getchar();
+		if (a == 0)
+		{
+			Savechapter(head);
+			break;
+		}
+		int count = 1;
+		switch (a)
+		{
+		case 1://-----------------------------------添加结构块---------------------------------------
+			while (1)
+			{
+				printf("想要添加你的捍卫者吗（Y/N）\n");//-------------------判断是否继续--------------------------------
+				char Choose = 0;
+				scanf("%c", &Choose);
+				getchar();
+				if (Choose == 'N')
+					break;//---------------------------判断是否继续--------------------------------
+				printf("添加你的捍卫者（机动性，防御性，攻击性，掌控力，代号）:");
+				char move = 0, defend = 0, attack = 0, control = 0;
+				char name[10] = { 0 };
+				scanf("%c %c %c %c %s", &move, &defend, &attack, &control, name);
+				getchar();
+				last = creatchapter(move, defend, attack, control, name);
+				if (head == NULL)
+					head = last;
+				else
+					early->next = last;
+				early = last;
+			}
+			break;
+		case 2://---------------------------------读取结构块----------------------------------------------
+			while (1)
+			{
+				printf("选择你的捍卫者（代号）");
+				char name[10] = { 0 };
+				scanf("%s", name);
+				getchar();
+				Rhodes* temp = testchapter(name, head);
+				if (temp == NULL)
+					break;
+				printf("%c %c %c %c %s\n", temp->Ability_move, temp->Ability_defend, temp->Ability_attack, temp->Ability_control, temp->name);
+				printf("想要继续查询你的捍卫者吗？（Y/N）\n");//---------------------------判断是否继续--------------------------------
+				char Choose = 0;
+				scanf("%c", &Choose);
+				getchar();
+				if (Choose == 'N')
+					break;//---------------------------判断是否继续--------------------------------
+			}
+			break;
+		case 3://---------------------------删除结构块---------------------------------
+			while (1)
+			{
+				printf("让那些你不想见到的家伙离远点吧（代号）\n");
+				char name[10] = { 0 };
+				scanf("%s", name);
+				getchar();
+				deletechapter(name, &head);
+				printf("还想继续删除吗？（Y/N）\n");//---------------------------判断是否继续--------------------------------
+				char Choose = 0;
+				scanf("%c", &Choose);
+				getchar();
+				if (Choose == 'N')
+					break;//---------------------------判断是否继续--------------------------------
+			}
+			break;
+		case 4://----------------------修改档案-------------------------------
+			while (1)
+			{
+				printf("修改一下数据吧（代号）\n");
+				char name[9] = { 0 };
+				scanf("%s", name);
+				getchar();
+				changechapter(name, head);
+				printf("想要继续吗？（Y/N）\n");//---------------------------判断是否继续--------------------------------
+				char Choose = 0;
+				scanf("%c", &Choose);
+				getchar();
+				if (Choose == 'N')
+					break;//---------------------------判断是否继续--------------------------------
+			}
+			break;
+		case 5://--------------------------在指定位置添加-------------------
+			InsertChapter(&head);
+			break;
+		case 6://------------------------------一键打印-------------------------------
+			count = 1;
+			showchapter(head,count);
+			break;
+		case 7:
+			menu();
+			break;
+		case 8://--------------------------------一键清空--------------------------------------
+			while (1)
+			{
+				printf("确定吗？（Y/N）\n");//---------------------------判断是否继续--------------------------------
+				char Choose = 0;
+				scanf("%c", &Choose);
+				getchar();
+				if (Choose == 'N')
+					break;//---------------------------判断是否继续--------------------------------
+				clearchapter(&head);
+				printf("Clear Over\n");
+				break;
+			}
+			break;
+		case 9://-------------------------移动档案-------------------------
+			MoveChapter(&head);
+			break;
+		}
+	}
+	return 0;
+}
+
+
+//void InitializeChapter(Rhodes** head, Rhodes** last, Rhodes** early)//--------------初始化----------------普通版本
+//{
+//	FILE* P = fopen("Panel.txt", "r");
+//	if (P == NULL)
+//	{
+//		perror("Initialize");
+//	}
+//	while (1)
+//	{
+//		char speed = 0, defend = 0, attack = 0, intelligence = 0;
+//		char name[12] = { 0 };
+//		if (fscanf(P, "%c %c %c %c %s ", &speed, &defend, &attack, &intelligence, name) != EOF)
+//		{
+//			Rhodes* New = creatchapter(speed, defend, attack, intelligence, name);//New未与head 链接
+//			if (*head == NULL)
+//				*head = New;
+//			else
+//				(*early)->next = New;
+//			(*early) = New;
+//		}
+//		else
+//		{
+//			printf("Initialize Correct\n");
+//			fclose(P);
+//			P = NULL;
+//			return;
+//		}
+//	}
+//}
+//void Savechapter(const Rhodes* head)//-------------------------存档--------------------------------普通版本
+//{
+//	if (head == NULL)
+//	{
+//		FILE* P = fopen("Panel.txt", "w");
+//		fclose(P);
+//		P = NULL;
+//		printf("No any chapter should be saved\n");
+//		return;
+//	}
+//	FILE* P = fopen("Panel.txt", "w");
+//	if (P == NULL)
+//	{
+//		perror("Save");
+//	}
+//	Rhodes* Temp = head;
+//	while (1)
+//	{
+//		if (Temp == NULL)
+//		{
+//			printf("Save Over\n");
+//			break;
+//		}
+//		else
+//		{
+//			fprintf(P, "%c %c %c %c %s ", Temp->Ability_move, Temp->Ability_defend, Temp->Ability_attack, Temp->Ability_control, Temp->name);
+//			Temp = Temp->next;
+//		}
+//	}
+//	fclose(P);
+//	P = NULL;
+//	return;
+//}

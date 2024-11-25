@@ -1,0 +1,40 @@
+#include <stdio.h>
+void quicksort(int *arr,int left,int right)
+{
+	if (left > right) return;
+	int tar = left;
+	int TAR = right;
+	while (left != right)
+	{
+		while (arr[right] >= arr[tar] && right > left)
+		{
+			right--;
+		}
+		while (arr[left] <= arr[tar] && right > left)
+		{
+			left++;
+		}
+		if (left < right)
+		{
+			int tem = arr[left];
+			arr[left] = arr[right];
+			arr[right] = tem;
+		}
+	}
+	int tem = arr[tar];
+	arr[tar] = arr[left];
+	arr[left] = tem;
+	quicksort(arr, tar, left - 1);
+	quicksort(arr, right + 1, TAR);
+	return;
+}
+int main()
+{
+	int arr[10] = { 10,5,4,6,9,8,2,3,1,7 };
+	quicksort(arr, 0, 9);
+	for (int i = 0; i < 10; i++)
+	{
+		printf("%d ", arr[i]);
+	}
+	return 0;
+}

@@ -1,0 +1,60 @@
+#include <stdio.h>
+struct queue {
+	int x;
+	int y;
+	int f;
+	int step;
+};
+int main()
+{
+	int head = 1, tail = 1, startx, starty, endx, endy, X, Y, xl, yl, flag = 0;
+	int map[51][51] = { 0 }, Book[51][51] = { 0 };
+	int next[4][2] = { {0,-1},{0,1},{1,0},{-1,0} };
+	struct queue Check[2501];
+	printf("输入地图大小：");
+	scanf("%d %d", &X, &Y);
+	printf("请初始化地图（1为障碍，0为路径)\n");
+	for (int i = 1; i <= X; i++)
+		for (int y = 1; y <= Y; y++)
+			scanf("%d", &map[i][y]);
+	printf("输入初始起点：");
+	scanf("%d %d", &startx, &starty);
+	printf("输入目标点：");
+	scanf("%d %d", &endx, &endy);
+	Check[tail].f = 0;
+	Check[tail].step = 0;
+	Check[tail].x = startx;
+	Check[tail].y = starty;
+	tail++;
+	Book[startx][starty] = 1;
+	while (head < tail)
+	{
+		for (int i = 0; i <= 3; i++)//head未变化，说明当前点并未变化，只是在将当前点的周围几个可行的点记录在队列中
+		{//这些被记录的点会在之后head加到对应的tail值后再在那个点的基础上扩展
+			xl = Check[head].x + next[i][0];
+			yl = Check[head].y + next[i][1];
+			if (xl<1 || yl<1 || xl>X || yl>Y || Book[xl][yl] == 1 || map[xl][yl] == 1)
+			{
+				continue;
+			}
+			Book[xl][yl] = 1;
+			Check[tail].x = xl;
+			Check[tail].y = yl;
+			Check[tail].f = head;
+			Check[tail].step = Check[head].step + 1;
+			tail++;
+			if (xl == endx && yl == endy)
+			{//寻找的过程中步数在同时增加，这个过程中先找到目标点的就是最快的。
+				flag = 1;
+				break;
+			}//由于每次都会对当前点周围进行遍历，所以不会出现漏掉的情况
+		}
+		if (flag == 1)
+		{
+			break;
+		}
+		head++;//对head进行跟进，即转移当前点
+	}
+	printf("最快需要%d步", Check[tail - 1].step);
+	return 0;
+}

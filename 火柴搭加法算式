@@ -1,0 +1,32 @@
+#include <stdio.h>
+int Fac(int n)
+{
+	int arr[10] = { 6,2,5,5,4,5,6,3,7,6 };//搭出0--9对应数字所需要的火柴数量
+	int sum = 0;
+	if (n == 0) sum += arr[0];
+	while (n > 0) {
+		sum += arr[n % 10];
+		n /= 10;
+	}//对传进来的数字进行运算，算出该数字需要多少火柴来搭建
+	return sum;
+}
+int main()
+{
+	int number = 0, a, b, c, count = 0;
+	scanf("%d", &number);
+	int rest = number - 4;
+	for (a = 0; a <= 1111; a++)
+	{//假设火柴数量上限是24根，除去加号和等号的4根，则剩下的20根最多能组成10个1，
+		for (b = 0; b <= 1111; b++)
+		{
+			c = a + b;
+			if (Fac(a) + Fac(b) + Fac(c) == rest)
+			{
+				printf("%d + %d = %d\n", a, b, c);
+				count++;
+			}
+		}
+	}
+	printf("总共存在%d个式子符合", count);
+	return 0;
+}

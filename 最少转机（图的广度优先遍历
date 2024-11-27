@@ -1,0 +1,71 @@
+#include <stdio.h>
+#define NONE 10000
+struct queue {
+	int step;
+	int location;
+}s[400];
+int main()
+{
+	int Book[16] = { 0 }, map[16][16];
+	int start = 0, end = 0, m, n, tag = 0, a, b, cur;
+	scanf("%d %d %d %d", &m, &n, &start, &end);
+	for (int i = 1; i <= m; i++)
+	{
+		for (int j = 1; j <= m; j++)
+		{
+			if (j == i) map[i][j] = 0;
+			else {
+				map[i][j] = NONE;
+			}
+		}
+	}
+	for (int i = 1; i <= n; i++)
+	{
+		scanf("%d %d", &a, &b);
+		map[a][b] = 1;
+		map[b][a] = 1;
+	}
+	int head = 1, tail = 1;
+	s[tail].location = start;
+	s[tail].step = 0;
+	tail++;
+	Book[start] = 1;
+	while (head < tail)
+	{
+		cur = s[head].location;
+		for (int i = 1; i <= m; i++)
+		{
+			if (map[cur][i] != NONE && Book[i]==0)
+			{
+				s[tail].location = i;
+				s[tail].step = s[head].step + 1;
+				Book[i] = 1;
+				tail++;
+			}
+			if (s[tail - 1].location == end)
+			{
+				tag = 1;
+				break;
+			}
+		}
+		if (tag==1)
+		{
+			printf("用时%d步", s[tail - 1].step);
+			break;
+		}
+		head++;
+	}
+	return 0;
+}
+
+//9 10 1 9
+//1 2
+//1 3
+//2 4
+//3 5
+//4 6
+//5 6
+//5 8
+//6 7
+//7 8
+//8 9

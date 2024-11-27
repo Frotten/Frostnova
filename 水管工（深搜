@@ -1,0 +1,104 @@
+#include <stdio.h>
+int map[16][16], Book[16][16];
+int n, m, top, tag, another;
+int direct[4][2]= { {-1,0},{1,0},{0,1},{0,-1} };
+//假设front等于1为从左往右，等于2为从上往下，等于3为从右往左，等于4为从下往上
+struct stack {
+	int x;
+	int y;
+}s[226];
+void DFS(int x, int y, int front)
+{
+	if (x == n && y == m + 1)
+	{
+		printf("能够达成胜利的路径为：");
+		for (int i = 1; i < top; i++)
+		{
+			printf("(%d,%d)->", s[i].x, s[i].y);
+		}
+		printf("(%d,%d)\n", s[top].x, s[top].y);
+		tag = 1;
+		return;
+	}
+	if (x<1 || y<1 || x>n || y>m || Book[x][y] == 1 || map[x][y] == 0)
+	{
+		return;
+	}
+	Book[x][y] = 1;//标记
+	top++;//入栈
+	s[top].x = x;
+	s[top].y = y;
+	if (map[x][y] >= 5 && map[x][y] <= 6)
+	{//5,6对应的是直管，故下一步只有一种情况
+		if (front == 1)
+		{
+			DFS(x, y + 1, 1);
+		}
+		if (front == 2)
+		{
+			DFS(x + 1, y, 2);
+		}
+		if (front == 3)
+		{
+			DFS(x, y - 1, 3);
+		}
+		if (front == 4)
+		{
+			DFS(x - 1, y, 4);
+		}
+	}
+	if (map[x][y] >= 1 && map[x][y] <= 4)
+	{//编号1--4对应的是曲管，存在两种情况
+		if (front == 1)
+		{
+			DFS(x + 1, y, 2);
+			DFS(x - 1, y, 4);
+		}
+		if (front == 2)
+		{
+			DFS(x, y + 1, 1);
+			DFS(x, y - 1, 3);
+		}
+		if (front == 3)
+		{
+			DFS(x + 1, y, 2);
+			DFS(x - 1, y, 4);
+		}
+		if (front == 4)
+		{
+			DFS(x, y - 1, 3);
+			DFS(x, y + 1, 1);
+		}
+	}
+	Book[x][y] = 0;//取消标记并出栈（该对应路径结束）
+	top--;
+	return;
+}
+int main()
+{
+	printf("输入地图范围：");
+	scanf("%d %d", &n, &m);//确定地图大小
+	printf("初始化地图:\n");
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = 1; j <= m; j++)
+		{
+			scanf("%d", &map[i][j]);
+		}
+	}
+	int ax = 1, ay = 1;//假设起始点在左上角
+	int AX = n, AY = m;//目标在右下角
+	DFS(1, 1, 1);
+	if (tag == 0)
+	{
+		printf("No any possibility to the end");
+	}
+	return 0;
+}
+
+//5 4
+//5 3 5 3
+//1 5 3 0
+//2 3 5 1
+//6 1 1 5
+//1 5 5 4 

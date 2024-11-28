@@ -1,0 +1,48 @@
+#include <stdio.h>
+#define NON 99999
+int map[16][16], Book[16];
+struct queue {
+	int Point;
+}s[226];
+int main()
+{
+	int n, m, a, b, start ,head = 1, tail = 1;
+	scanf("%d %d", &n,&m);
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = 1; j <= n; j++)
+		{
+			if (i == j) map[i][j] = 0;
+			else
+			{
+				map[i][j] = NON;
+			}
+		}
+	}
+	for (int i = 0; i < m; i++)
+	{
+		scanf("%d %d", &a, &b);
+		map[a][b] = 1;
+		map[b][a] = 1;
+	}
+	scanf("%d", &start);
+	s[tail].Point = start;
+	Book[start] = 1;
+	tail++;
+	printf("Start");
+	while (head < tail)
+	{
+		for (int i = 1; i <= n; i++)
+		{
+			if (map[s[head].Point][i] == 1 && Book[i] == 0)
+			{
+				s[tail].Point = i;
+				Book[i] = 1;
+				tail++;
+			}
+		}
+		printf("->%d", s[head].Point);
+		head++;
+	}
+	return 0;
+}

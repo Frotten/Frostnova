@@ -1,0 +1,65 @@
+#include <stdio.h>
+#define NON 99999999
+int n, sum, min = NON, end, map[16][16], Book[16];
+void DFS(int cur)
+{
+	if (cur == end)
+	{
+		printf("%d公里 ", sum);
+		if (min > sum)
+		{
+			min = sum;
+		}
+		return;
+	}
+	for (int i = 1; i <= n; i++)
+	{
+		if (map[cur][i] != 0 && map[cur][i] != NON && Book[i] == 0)
+		{
+			int ano = sum;
+			sum += map[cur][i];
+			Book[i] = 1;
+			DFS(i);
+			sum = ano;
+			Book[i] = 0;
+		}
+	}
+	return;
+}
+int main()
+{
+	int m, a, b, c, start;
+	scanf("%d %d", &n, & m);
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = 1; j <= n; j++)
+		{
+			if (i == j) map[i][j] = 0;
+			else {
+				map[i][j] = NON;
+			}
+		}
+	}
+	for (int i = 0; i < m; i++)
+	{
+		scanf("%d %d %d", &a, &b, &c);
+		map[a][b] = c;//单项，有距离
+	}
+	scanf("%d %d", &start, &end);
+	printf("能够抵达目标点的路线长度有：");
+	Book[start] = 1;
+	DFS(start);
+	printf("\n最近的里程是：%d", min);
+	return 0;
+}
+
+//5 8
+//1 2 2
+//1 5 10
+//2 3 3
+//2 5 7
+//3 1 4
+//3 4 4
+//4 5 5
+//5 3 3
+//1 5

@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <math.h>
+int Book[4][4], map[21][4], cost, MIN = 999, PR;
+void DFS(int turn,int TAG){
+	if (map[turn][1] * map[turn][1] + map[turn][2] * map[turn][2] == map[turn][3] * map[turn][3] && TAG <= 4){
+		if (cost < MIN){
+			MIN = cost;
+		}
+		PR = 1;
+		return;
+	}
+	if (TAG > 3)
+		return;
+	for (int i = 1; i <= 3; i++){
+		if (i == 1){
+			if (Book[TAG][1] == 0){
+				Book[TAG][1] = 1;
+				DFS(turn,TAG + 1);
+				Book[TAG][1] = 0;
+			}
+		}
+		if (i == 2){
+			if (Book[TAG][2] == 0){
+				cost++;
+				map[turn][TAG]++;
+				Book[TAG][2] = 1;
+				DFS(turn ,TAG + 1);
+				Book[TAG][2] = 0;
+				map[turn][TAG]--;
+				cost--;
+			}
+		}
+		if (i == 3){
+			if (Book[TAG][3] == 0 && map[turn][TAG] > 1){
+				cost++;
+				map[turn][TAG]--;
+				Book[TAG][3] = 1;
+				DFS(turn ,TAG + 1);
+				Book[TAG][3] = 0;
+				map[turn][TAG]++;
+				cost--;
+			}
+		}
+	}
+}
+int main(){
+	int T, max = 0, I = 0, turn = 1;
+	scanf("%d", &T);
+	for (turn = 1; turn <= T; turn++){
+		scanf("%d %d %d", &map[turn][1], &map[turn][2], &map[turn][3]);
+		if (map[turn][1] > map[turn][2] && map[turn][1] > map[turn][3]){
+			int tem = map[turn][1];
+			map[turn][1] = map[turn][3];
+			map[turn][3] = tem;
+		}
+		if (map[turn][2] > map[turn][1] && map[turn][2] > map[turn][3]){
+			int tem = map[turn][2];
+			map[turn][2] = map[turn][3];
+			map[turn][3] = tem;
+		}
+		DFS(turn,1);
+		if (PR==0){
+			printf("-1\n");
+		}
+		else {
+			printf("%d\n", MIN);
+		}
+		PR = 0;
+		MIN = 9999;
+		cost = 0;
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j < 4; j++)
+				Book[i][j] = 0;
+	}
+	return 0;
+}

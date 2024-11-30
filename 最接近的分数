@@ -1,0 +1,27 @@
+#include <stdio.h>
+int GY(int a, int b)
+{
+	while (b != 0) {
+		int tem = b;
+		b = a % b;
+		a = tem;
+	}
+	return a;
+}
+int main()
+{
+	int N, A, B, Under, Up, maxUp = 0, maxUn = 1;
+	scanf("%d %d %d", &N, &A, &B);
+	for (Under = 1; Under <= N; Under++)
+	{
+		Up = (A * Under) / B;
+		if ((Up * B) < (Under * A) && Up * maxUn > Under * maxUp && GY(Up, Under) == 1)
+		{
+			maxUp = Up;
+			maxUn = Under;
+		}
+	}
+	printf("%d %d", maxUp, maxUn);
+	return 0;
+}
+//分母不超过 N 且 小于 A/B 的最大最简分数是多少？

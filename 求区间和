@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+	int n, m, su = 0;
+	scanf("%d", &n);
+	int* arr = (int*)malloc(sizeof(int) * (n + 1));
+	int* sum = (int*)malloc(sizeof(int) * (n + 1));
+	for (int i = 0; i < n; i++)
+	{
+		scanf("%d", &arr[i]);
+		su += arr[i];
+		sum[i] = su;
+	}
+	scanf("%d", &m);
+	for (int i = 0; i < m; i++)
+	{
+		int m = 0, l = 0;
+		scanf("%d %d", &m, &l);
+		if (m == 1)
+		{
+			printf("%d\n", sum[l - 1]);
+		}
+		else {
+			printf("%d\n", sum[l - 1] - sum[m - 2]);
+		}
+	}
+	return 0;
+}

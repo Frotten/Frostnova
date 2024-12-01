@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+	int n, p, min = 99999, x, y, z;
+	scanf("%d %d", &n, &p);
+	int* arr = (int*)malloc(sizeof(int) * (n + 2));
+	int* ARR = (int*)malloc(sizeof(int) * (n + 2));
+	arr[0] = 0, ARR[0] = 0;
+	for (int i = 1; i <= n; i++){
+		scanf("%d", &arr[i]);
+		ARR[i] = arr[i] - arr[i - 1];
+	}
+	for (int i = 0; i < p; i++){
+		scanf("%d %d %d", &x, &y, &z);
+		ARR[x] += z;
+		ARR[y + 1] -= z;
+	}
+	for (int i = 1; i <= n; i++) {
+		arr[i] = arr[i - 1] + ARR[i];
+		if (min > arr[i]) {
+			min = arr[i];
+		}
+	}
+	printf("%d", min);
+	free(arr);
+	return 0;
+}

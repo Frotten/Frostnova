@@ -1,0 +1,28 @@
+#include <stdio.h>
+int map[1100][1100], MAP[1100][1100];
+int main()
+{
+	int N, M, C, max = -9999999999, X = 0, Y = 0;
+	scanf("%d %d %d", &N, &M, &C);
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= M; j++) {
+			scanf("%d", &map[i][j]);
+			MAP[i][j] = MAP[i - 1][j] + MAP[i][j - 1] - MAP[i - 1][j - 1] + map[i][j];
+		}
+	}
+	C--;
+	for (int x = 1; x <= N - C; x++)
+	{
+		for (int y = 1; y <= M - C; y++)
+		{
+			if (MAP[x + C][y + C] - MAP[x + C][y - 1] - MAP[x - 1][y + C] + MAP[x - 1][y - 1] > max)
+			{
+				max = MAP[x + C][y + C] - MAP[x + C][y - 1] - MAP[x - 1][y + C] + MAP[x - 1][y - 1];
+				X = x;
+				Y = y;
+			}
+		}
+	}
+	printf("%d %d", X, Y);
+	return 0;
+}

@@ -1,0 +1,30 @@
+#include<stdio.h>
+long long a[100001];
+long long b[100001];
+int main()
+{
+	long long n;
+	scanf("%lld", &n);
+	for (long long i = 1; i <= n; i++){
+		scanf("%lld", &a[i]);
+		b[i] = a[i] - a[i - 1];
+	}
+	long long zheng = 0, fan = 0, max, Abs;
+	for (long long i = 2; i <= n; i++)
+	{
+		if (b[i] > 0)
+			zheng += b[i];
+		else
+			fan += (-b[i]);
+	}
+	if (zheng > fan){
+		max = zheng;
+		Abs = zheng - fan;
+	}
+	else{
+		max = fan;
+		Abs = fan - zheng;
+	}
+	printf("%lld\n%lld", max, Abs + 1);
+	return 0;
+}

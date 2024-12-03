@@ -1,0 +1,33 @@
+#include <stdio.h>
+int arr[101][101] = { 0 };
+int main()
+{
+	int a, b;
+	scanf("%d %d", &a, &b);
+	for (int i = 0; i < a; i++) {
+		for (int j = 0; j < b; j++) {
+			scanf("%d", &arr[i][j]);
+		}
+	}
+	int x = 0, y = 0, Lx = 0, Ly = 0, tag = 0;
+	while (x != a - 1 || y != b - 1){
+		printf("%d\n", arr[x][y]);
+		tag = 1;
+		if ((x + 1 > a - 1) || (y - 1 < 0)){
+			if (Ly != b - 1){
+				Ly++;
+			}
+			else {
+				Lx++;
+			}
+			x = Lx;
+			y = Ly;
+		}
+		else {
+			x++;
+			y--;
+		}
+	}
+	printf("%d", arr[a - 1][b - 1]);
+	return 0;
+}

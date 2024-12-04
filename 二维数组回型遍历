@@ -1,0 +1,43 @@
+#include <stdio.h>
+int arr[101][101];
+int main()
+{
+	int a, b, sum, count = 0, x = 1, y = 1, Cony = 1, Conx = 1;
+	scanf("%d %d", &a, &b);
+	sum = a * b;
+	for (int i = 1; i <= a; i++){
+		for (int j = 1; j <= b; j++){
+			scanf("%d", &arr[i][j]);
+		}
+	}
+	while (count < sum)
+	{
+		for (y = Cony; y <= b - Cony + 1 && count < sum; y++)
+		{
+			printf("%d\n", arr[x][y]);
+			count++;
+		}
+		y--;
+		for (x = Conx + 1 ; x <= a - Conx + 1 && count < sum; x++)
+		{
+			printf("%d\n", arr[x][y]);
+			count++;
+		}
+		x--;
+		for (y-- ; y >= Cony && count < sum; y--)
+		{
+			printf("%d\n", arr[x][y]);
+			count++;
+		}
+		y++;
+		for (x-- ; x > Conx && count < sum; x--)
+		{
+			printf("%d\n", arr[x][y]);
+			count++;
+		}
+		x++;
+		Conx++;
+		Cony++;
+	}
+	return 0;
+}

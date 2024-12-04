@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+int main()
+{
+	char C[1001] = { 0 };
+	char K[1001] = { 0 };
+	char M[1001] = { 0 };
+	int Key[1001] = { 0 };
+	scanf("%s", K);
+	scanf("%s", C);
+	int lenC = strlen(C);
+	int lenK = strlen(K);
+	int count = 0;
+	for (int i = 0; i < lenK; i++) {
+		Key[i] = tolower(K[i]) - 'a';
+	}
+	for (int i = 0; i < lenC; i++) {
+		if (C[i] >= 'A' && C[i] <= 'Z') {
+			if (C[i] - Key[(count)] < 'A') {
+				M[i] = C[i] - Key[(count++)] + 26;
+				count %= lenK;
+			}
+			else {
+				M[i] = C[i] - Key[(count++)];
+				count %= lenK;
+			}
+		}
+		else {
+			if (C[i] - Key[(count)] < 'a') {
+				M[i] = C[i] - Key[(count++)] + 26;
+				count %= lenK;
+			}
+			else {
+				M[i] = C[i] - Key[(count++)];
+				count %= lenK;
+			}
+		}
+	}
+	printf("%s", M);
+	return 0;
+}

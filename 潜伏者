@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <string.h>
+int main(){
+	char Original_ciphertext[101] = { 0 }, Translated_ciphertext[101] = { 0 }, Tar_ciphertext[101] = { 0 };
+	int Words[26] = { 0 };
+	gets(Original_ciphertext);
+	gets(Translated_ciphertext);
+	gets(Tar_ciphertext);
+	int lenOri = strlen(Original_ciphertext);
+	int lenTar = strlen(Tar_ciphertext);
+	if (lenOri < 26) {
+		printf("Failed");
+		return 0;
+	}
+	for (int i = 0; i < lenOri; i++) {
+		Words[Translated_ciphertext[i] - 'A'] = 1;
+	}
+	for (int i = 0; i < 26; i++) {
+		if (Words[i] == 0) {
+			printf("Failed");
+			return 0;
+		}
+	}
+	for (int i = 0; i < lenOri; i++) {
+		for (int j = 0; j != i && j < lenOri; j++) {
+			if ((Original_ciphertext[i] == Original_ciphertext[j] && Translated_ciphertext[i] != Translated_ciphertext[j]) || (Translated_ciphertext[i] == Translated_ciphertext[j] && Original_ciphertext[i] != Original_ciphertext[j])) {
+				printf("Failed\n");
+				return 0;
+			}
+		}
+	}
+	for (int i = 0; i < lenTar; i++)
+	{
+		for (int j = 0; j < lenOri; j++)
+		{
+			if (Tar_ciphertext[i] == Original_ciphertext[j]) {
+				Tar_ciphertext[i] = Translated_ciphertext[j];
+				break;
+			}
+		}
+	}
+	printf("%s", Tar_ciphertext);
+	return 0;
+}

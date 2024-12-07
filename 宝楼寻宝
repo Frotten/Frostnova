@@ -1,0 +1,46 @@
+#include <stdio.h>
+typedef struct Node {
+	int exist;
+	int number;
+}Room;
+Room class[10002][102];
+int K[10001];
+unsigned long long result = 0;
+int main()
+{
+	int M, N, location, m = 1, n = 0;
+	scanf("%d %d", &M, &N);
+	for (int i = 1; i <= M; i++) 
+	{
+		for (int j = 0; j < N; j++) 
+		{
+			scanf("%d %d", &class[i][j].exist, &class[i][j].number);
+			K[i] += class[i][j].exist;
+		}
+	}
+	scanf("%d", &location);
+	while (m <= M) {
+		result += class[m][location].number;
+		int turn = class[m][location].number % K[m];
+		if (turn == 0) {
+			turn = K[m];
+		}
+		int count = 0;
+		if (class[m][location].exist) {
+			count++;
+		}
+		while (count < turn) {
+			location++;
+			location %= N;
+			while (!class[m][location].exist) {
+				location++;
+				location %= N;
+			}
+			count++;
+		}
+		m++;
+		result %= 20123;
+	}
+	printf("%lld", result);
+	return 0;
+}

@@ -1,0 +1,122 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 999999
+struct NodeCommon {
+	int Point;
+	int Length;
+	struct NodeCommon* next;
+};
+struct HeadNode {
+	struct NodeCommon* head;
+};
+struct Graph {
+	int numPoint;
+	struct HeadNode* Array;
+};
+struct Graph* creatGraph(int num){
+	if (!num) return NULL;
+	struct Graph* Tutu = (struct Graph*)malloc(sizeof(struct Graph));
+	Tutu->numPoint = num;
+	Tutu->Array = (struct HeadNode*)malloc(sizeof(struct HeadNode) * (num + 1));
+	for (int i = 0; i <= num; i++) {
+		Tutu->Array[i].head = NULL;
+	}
+	return Tutu;
+}
+struct NodeCommon* creatNode(int Poi ,int len) {
+	struct NodeCommon* NewNode = (struct NodeCommon*)malloc(sizeof(struct NodeCommon));
+	NewNode->Point = Poi;
+	NewNode->Length = len;
+	NewNode->next = NULL;
+	return NewNode;
+}
+void AddEdge(struct Graph* Tutu,int start,int end ,int length) {
+	struct NodeCommon* Last = creatNode(end, length);
+	Last->next = Tutu->Array[start].head;
+	Tutu->Array[start].head = Last;
+}
+void Print(struct Graph* Tutu) {
+	struct NodeCommon* TEMP = NULL;
+	for (int i = 1; i <= Tutu->numPoint; i++) {
+		TEMP = Tutu->Array[i].head;
+		if (TEMP == NULL) {
+			printf("\n第%d条边无连接点", i);
+			continue;
+		}
+		printf("\n第%d条边所连接的其他边有：%d", i,i);
+		while (TEMP != NULL) {
+			printf("--%d[%d]", TEMP->Point,TEMP->Length);
+			TEMP = TEMP->next;
+		}
+	}
+}
+int minDistance(int dist[], int sptSet[], int V) {
+	int min = MAX, min_index = 0;
+	for (int v = 1; v <= V; v++) {
+		if (sptSet[v] == 0 && dist[v] <= min) {
+			min = dist[v], min_index = v;
+		}
+	}
+	return min_index;
+}
+void printSolution(int dist[], int n) {
+	printf("终点，以及起点到终点的距离\n");
+	for (int i = 1; i <= n; i++) {
+		printf("%d ----- %d\n", i, dist[i]);
+	}
+}
+void dijkstra(struct Graph* graph, int start) {
+	int V = graph->numPoint;
+	int* dist = (int*)malloc(sizeof(int) * (V + 1));
+	int *Book = (int*)malloc(sizeof(int) * (V + 1));
+	for (int i = 1; i <= V; i++) {
+		dist[i] = MAX;
+		Book[i] = 0;
+	}
+	dist[start] = 0;
+	for (int count = 1; count <= V - 1; count++) {
+		int u = minDistance(dist, Book, V);
+		Book[u] = 1;
+		struct NodeCommon* Temp = graph->Array[u].head;
+		while (Temp != NULL) {
+			int v = Temp->Point;
+			if (Book[v] == 0 && dist[u] != MAX && dist[u] + Temp -> Length < dist[v]) {
+				dist[v] = dist[u] + Temp -> Length;
+			}
+			Temp = Temp -> next;
+		}
+	}
+	printSolution(dist, V);
+	free(dist);
+	free(Book);
+}
+int main()
+{
+	int num, len, a, b, c, start, end;
+	printf("输入节点个数和路径个数:");
+	scanf("%d %d", &num, &len);
+	struct Graph* NewChapter = creatGraph(num);
+	printf("请输入起点，终点和长度\n");
+	for (int i = 0; i < len; i++){
+		scanf("%d %d %d", &a, &b, &c);
+		AddEdge(NewChapter, a, b, c);
+	}
+	Print(NewChapter);
+	printf("\n输入目标起点：");
+	scanf("%d", &start);
+	dijkstra(NewChapter, start);
+	free(NewChapter->Array);
+	free(NewChapter);
+	return 0;
+}
+
+
+//4 8
+//1 2 2
+//1 3 6
+//1 4 4
+//2 3 3
+//3 1 7
+//3 4 1
+//4 3 12
+//4 1 5

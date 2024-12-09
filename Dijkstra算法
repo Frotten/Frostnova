@@ -1,0 +1,50 @@
+#include <stdio.h>
+#define MAX 9999999
+int map[20][20], Book[20];
+int main(){
+	int n, start, end, length, num;
+	int Waymin[10] = { 0 };
+	scanf("%d", &n);
+	for (int i = 1; i <= n; i++){
+		for (int j = 1; j <= n; j++){
+			map[i][j] = MAX;
+			if (i == j) {
+				map[i][j] = 0;
+			}
+		}
+	}
+	printf("输入路径数量，路径起点，路径终点和路径长度:");
+	scanf("%d", &num);
+	for (int i = 0; i < num; i++){
+		scanf("%d %d %d", &start, &end, &length);
+		map[start][end] = length;
+	}
+	printf("输入目标起点：");
+	scanf("%d", &start);
+	for (int i = 1; i <= n; i++) {
+		Waymin[i] = map[start][i];//点start到各点的距离（当前
+	}
+	Book[start] = 1;
+	for (int i = 1; i <= n - 1; i++){//点start最多有n-1条路通向其他点（每个点都有一条路
+		int min = MAX;
+		int locat = 0;
+		for (int j = 1; j <= n; j++) {
+			if (Book[j] == 0 && Waymin[j] < min) {
+				min = Waymin[j];
+				locat = j;
+			}
+		}
+		Book[locat] = 1;
+		for (int i = 1; i <= n; i++) {
+			if (map[locat][i] < MAX) {
+				if (Waymin[i] > Waymin[locat] + map[locat][i]) {
+					Waymin[i] = Waymin[locat] + map[locat][i];
+				}
+			}
+		}
+	}
+	printf("输入目标终点：");
+	scanf("%d", &end);
+	printf("%d", Waymin[end]);
+	return 0;
+}

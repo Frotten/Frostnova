@@ -1,0 +1,49 @@
+#include <stdio.h>
+int map[16][16] = { 0 }, Book[16][16] = { 0 }, min = 9999;
+void DFS(int stx, int sty, int enx, int eny, int count ,int XL, int YL) {
+	if (stx == enx && sty == eny) {
+		if (count < min) {
+			min = count;
+		}
+		return;
+	}
+	int location[4][2] = { {0,1},{0,-1},{1,0},{-1,0} };
+	for (int i = 0; i <= 3; i++) {
+		stx += location[i][0];
+		sty += location[i][1];
+		if (stx < 0 || sty < 0 || stx > XL || sty > YL || Book[stx][sty] == 1 || map[stx][sty] == 0 ) {
+			stx -= location[i][0];
+			sty -= location[i][1];
+			continue;
+		}
+		else {
+			Book[stx][sty] = 1;
+			DFS(stx, sty, enx, eny, count + 1,XL, YL);
+			stx -= location[i][0];
+			sty -= location[i][1];
+			Book[stx][sty] = 0;
+		}
+	}
+}
+int main()
+{
+	int stx, sty, enx, eny, XL, YL, count = 0;
+	printf("输入地图边界大小(纵向长，横向长):");
+	scanf("%d %d", &XL, &YL);
+	printf("\n初始化地图（0为障碍，1为路径）：\n");
+	for (int i = 0; i < XL; i++) {
+		for (int j = 0; j < YL; j++) {
+			scanf("%d", &map[i][j]);
+		}
+	}
+	printf("输入起点和终点：");
+	scanf("%d %d %d %d", &stx, &sty, &enx, &eny);
+	Book[stx][sty] = 1;
+	DFS(stx, sty, enx, eny, count, XL, YL);
+	printf("最短路径需要%d步", min);
+	return 0;
+}
+//一个地图，现在需要你来初始化地图，并标定起点和终点，输出起点到终点的最短距离
+//1 0 1 1 1 0 1
+//1 0 1 0 1 0 1
+//1 1 1 0 1 1 1

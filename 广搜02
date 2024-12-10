@@ -1,0 +1,51 @@
+#include <stdio.h>
+typedef struct queue {
+	int x;
+	int y;
+	int step;
+}queue;
+int main()
+{
+	int x, y, Ex, Ey, XL, YL, head = 0, tail = 0;
+	queue Step[225];
+	int map[16][16] = { 0 }, Book[16][16] = { 0 };
+	printf("输入XL和YL:");
+	scanf("%d %d", &XL, &YL);
+	printf("初始化地图\n");
+	for (int i = 0; i < XL; i++) {
+		for (int j = 0; j < YL; j++) {
+			scanf("%d", &map[i][j]);
+		}
+	}
+	printf("输入起点和终点：");
+	scanf("%d %d %d %d", &x, &y ,&Ex, &Ey);
+	Step[tail].x = x;
+	Step[tail].y = y;
+	Step[tail].step = 0;
+	Book[x][y] = 1;
+	tail++;
+	while (head < tail) {
+		int locat[4][2] = { {0,1},{0,-1},{1,0},{-1,0} };
+		for (int i = 0; i <= 3; i++) {
+			int X = Step[head].x + locat[i][0];
+			int Y = Step[head].y + locat[i][1];
+			if (X < 0 || Y < 0 || X > XL - 1 || Y > YL - 1 || Book[X][Y] == 1 || map[X][Y] == 0) {
+				continue;
+			}
+			else {
+				Step[tail].x = X;
+				Step[tail].y = Y;
+				Step[tail].step = Step[head].step + 1;
+				Book[X][Y] = 1;
+			}
+			if (Step[tail].x == Ex && Step[tail].y == Ey) {
+				head = tail + 1;
+				break;
+			}
+			tail++;
+		}
+		head++;
+	}
+	printf("%d步", Step[tail].step);
+	return 0;
+}

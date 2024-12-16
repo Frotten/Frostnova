@@ -1,0 +1,63 @@
+#include <stdio.h>
+int h[101];//用来存放堆的数组
+int n;//用来存储堆中的元素，即堆的大小
+void swap(int x, int y) {//交换
+	int t;
+	t = h[x];
+	h[x] = h[y];
+	h[y] = t;
+	return;
+}
+//向下调整函数
+void siftdown(int i) {//传入一个需要向下调整的节点编号i
+	int t, flag = 0;//flag标记是否需要继续向下
+	while (i * 2 <= n && flag == 0) {
+		if (h[i] > h[i * 2]) {
+			t = i * 2;
+		}
+		else {
+			t = i;
+		}
+		if (i * 2 + 1 <= n) {//如果目标点有右儿子
+			if (h[t] > h[i * 2 + 1]) {
+				t = i * 2 + 1;
+			}
+		}
+		if (t != i) {
+			swap(t, i);
+			i = t;
+		}
+		else {
+			flag = 1;
+		}
+	}
+	return;
+}
+void creat() {//创建堆
+	for (int i = n / 2; i >= 1; i--) {
+		siftdown(i);
+	}
+	return;
+}
+int deletmax() {//删除最大的元素
+	int t;
+	t = h[1];
+	h[1] = h[n];
+	n--;
+	siftdown(1);//向下调整
+	return t;//返回之前记录的堆的顶点最小值
+}
+int main()
+{
+	int num;
+	scanf("%d", &num);
+	for (int i = 1; i <= num; i++) {
+		scanf("%d", &h[i]);
+	}
+	n = num;
+	creat();
+	for (int i = 1; i <= num; i++) {
+		printf("%d ", deletmax());
+	}
+	return 0;
+}

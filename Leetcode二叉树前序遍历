@@ -1,0 +1,16 @@
+ int Size(struct TreeNode *root){
+    return root==NULL ? 0 : Size(root->left) + Size(root->right) + 1;
+ }
+ void prev(struct TreeNode *root,int *Block,int *top){
+    if(root!=NULL){
+        Block[(*top)++]=root->val;
+        prev(root->left,Block,top);
+        prev(root->right,Block,top);
+    }
+ }
+int* preorderTraversal(struct TreeNode* root, int* returnSize) {
+    int *Aim=(int*)malloc(sizeof(int) * Size(root));
+    *returnSize=0;
+    prev(root,Aim,returnSize);
+    return Aim;
+}

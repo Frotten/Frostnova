@@ -1,0 +1,56 @@
+#include<stdio.h>
+void swap(int* arr, int a, int b) {
+	int t = arr[a];
+	arr[a] = arr[b];
+	arr[b] = t;
+	return;
+}
+void siftdown(int* arr, int num, int n) {
+	int t, flag = 0;
+	while (n * 2 <= num && flag == 0) {
+		if (arr[n] > arr[n * 2]) {
+			t = n * 2;
+		}
+		else {
+			t = n;
+		}
+		if ((n * 2 + 1) <= num && arr[t] > arr[n * 2 + 1]) {
+			t = n * 2 + 1;
+		}
+		if (t != n) {
+			swap(arr, t, n);
+			n = t;
+		}
+		else flag = 1;
+	}
+	return;
+}
+void creat(int* arr, int num, int n) {
+	for (int i = n / 2; i >= 1; i--) {
+		siftdown(arr, num, i);
+	}
+	return;
+}
+void heapsort(int* arr, int n) {
+	while (n > 1) {
+		swap(arr ,1, n);
+		n--;
+		siftdown(arr,n,1);
+	}
+	return;
+}
+int main()
+{
+	int arr[11] = { 0,12,3,16,5,9,4,25,26,98,32 };
+	creat(arr, 10, 10);
+	for (int i = 1; i <= 10; i++) {
+		printf("%d ", arr[i]);
+	}
+	printf("\n");
+	heapsort(arr, 10);
+	for (int i = 1; i <= 10; i++) {
+		printf("%d ", arr[i]);
+	}
+	printf("\n");
+	return 0;
+}

@@ -1,0 +1,37 @@
+#include <stdio.h>
+int main()
+{
+	int n, k;
+	double sum = 0, middle = 0;
+	scanf("%d %d", &n, &k);
+	double arr[10001] = { 0 };
+	for (int i = 0; i < n; i++){
+		scanf("%lf", &arr[i]);
+		sum += arr[i];
+	}
+	double right = sum / k;
+	double left = 0;
+	while (right >= left) {
+		middle = (right + left) / 2;
+		int count = 0;
+		for (int i = 0; i < n; i++) {
+			count += (int)(arr[i] / middle);
+		}
+		if (count > k) {
+			left = middle + 0.01;
+		}
+		else if (count < k) {
+			right = middle - 0.01;
+		}
+		else {
+			if (right - left < 0.01) {
+				break;
+			}
+			else {
+				left = middle + 0.01;
+			}
+		}
+	}
+	printf("%.2lf", middle);
+	return 0;
+}

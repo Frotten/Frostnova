@@ -1,0 +1,26 @@
+#include <stdio.h>
+int main()
+{
+	long long n, p, min = 999999;
+	int arr[10000000] = { 0 };
+	int AR[10000000] = { 0 };
+	scanf("%lld %lld", &n, &p);
+	for (long long i = 1; i <= n; i++) {
+		scanf("%d", &arr[i]);
+		AR[i] = arr[i] - arr[i - 1];
+	}
+	for (long long i = 0; i < p; i++) {
+		int x, y, z;
+		scanf("%d %d %d", &x, &y, &z);
+		AR[x] += z;
+		AR[y + 1] -= z;
+	}
+	for (long long i = 1; i <= n; i++) {
+		arr[i] = arr[i - 1] + AR[i];
+		if (arr[i] < min) {
+			min = arr[i];
+		}
+	}
+	printf("%lld", min);
+	return 0;
+}

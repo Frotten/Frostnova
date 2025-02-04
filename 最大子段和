@@ -1,0 +1,17 @@
+#include <stdio.h>
+int main()
+{
+	int n, max = -10000,sum = 0;
+	scanf("%d", &n);
+	int arr[200005] = { 0 };
+	for (int i = 1; i <= n; i++) {
+		scanf("%d", &arr[i]);
+		sum += arr[i];
+		max = (sum > max) ? sum : max;
+		if (sum < 0) {
+			sum = 0;
+		}
+	}
+	printf("%d", max);
+	return 0;
+}

@@ -1,0 +1,22 @@
+#include <stdio.h>
+int map[1100][1100], run[1100][1100];
+int main()
+{
+	int n, m, x1, x2, y1, y2;
+	scanf("%d %d", &n, &m);
+	while (m--) {
+		scanf("%d %d %d %d", &x1, &y1, &x2, &y2);
+		run[x1][y1] += 1; 
+		run[x1][y2 + 1] -= 1;
+		run[x2 + 1][y1] -= 1;
+		run[x2 + 1][y2 + 1] += 1;
+	}
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			map[i][j] = map[i - 1][j] + map[i][j - 1] - map[i - 1][j - 1] + run[i][j];
+			printf("%d ", map[i][j]);
+		}
+		printf("\n");
+	}
+	return 0;
+}

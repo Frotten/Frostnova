@@ -1,0 +1,41 @@
+#include <stdio.h>//输出每个样例能够到达的最大高度
+long long arr[200005] = { 0 };
+long long brr[200005] = { 0 };
+long long sum[200005] = { 0 };
+long long max[200005] = { 0 };
+int find(long long *arr, long long n, long long D) {
+	long long low = 1;
+	long long high = n;
+	while (low <= high) {
+		long long mid = low + (high - low) / 2;
+		if (arr[mid] <= D) {
+			if (arr[mid + 1] <= D && arr[mid + 1] != 0)low = mid + 1;
+			else return mid;
+		}
+		else{
+			high = mid - 1;
+		}
+	}
+}
+int main()
+{
+	long long t;
+	scanf("%lld", &t);
+	while (t--) {
+		long long n, q ,o = 0;//(o.0)
+		scanf("%lld %lld", &n, &q);
+		for (long long i = 1; i <= n; i++) {
+			scanf("%lld", &arr[i]);
+			sum[i] = sum[i - 1] + arr[i];
+			if (o < arr[i]) o = arr[i];
+			max[i] = o;
+		}
+		for (long long i = 1; i <= q; i++) {
+			scanf("%lld", &brr[i]);
+			long long rem = find(max, n, brr[i]);
+			printf("%lld ", sum[rem]);
+		}
+		printf("\n");
+	}
+	return 0;
+}

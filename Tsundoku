@@ -1,0 +1,36 @@
+#include <stdio.h>
+long long a[200005] = { 0 }, b[2000005] = { 0 };
+int half(long long *arr, int n, long long D) {
+    int low = 0, high = n;
+    while (low < high) {
+        int mid = low + (high - low) / 2;
+        if (arr[mid] <= D) {
+            low = mid + 1;
+        }
+        else {
+            high = mid;
+        }
+    }
+    return low;
+}
+
+int main() {
+    long long n, m, k, count = 0;
+    scanf("%lld %lld %lld", &n, &m, &k);
+    for (long long i = 1; i <= n; i++) {
+        scanf("%lld", &a[i]);
+        a[i] += a[i - 1];
+    }
+    for (long long i = 1; i <= m; i++) {
+        scanf("%lld", &b[i]);
+        b[i] += b[i - 1];
+    }
+    for (long long i = 0; i <= n; i++) {
+        if (k >= a[i]) {
+            int tem = half(b + 1, m, k - a[i]);
+            count = (tem + i > count) ? tem + i : count;
+        }
+    }
+    printf("%lld", count);
+    return 0;
+}

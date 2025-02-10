@@ -1,0 +1,31 @@
+#include <stdio.h>
+long long N, C;
+long long max;
+long long arr[1005], sum[1005];
+void DFS(long long tar, long long wei) {
+	if (wei > C)return;
+	if (tar < 1) {
+		if (wei > max) max = wei;
+		return;
+	}
+	long long mas = sum[tar] + wei;
+	if (mas <= C) {
+		if (mas > max) max = mas;
+		return;
+	}
+	if (wei + arr[tar] <= C) {
+		DFS(tar - 1, wei + arr[tar]);
+	}
+	DFS(tar - 1, wei);
+}
+int main()
+{
+	scanf("%lld %lld", &N, &C);
+	for (int i = 1; i <= N; i++) {
+		scanf("%lld", &arr[i]);
+		sum[i] = sum[i - 1] + arr[i];
+	}
+	DFS(N, 0);
+	printf("%lld", max);
+	return 0;
+}

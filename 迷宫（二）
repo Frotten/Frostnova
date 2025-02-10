@@ -1,0 +1,59 @@
+#include <stdio.h>
+int n, m;
+char map[15][15] = { 0 };
+int Book[15][15];
+int location[4][2] = { {0,1},{0,-1},{1,0},{-1,0} };
+struct queue {
+	int x;
+	int y;
+	int step;
+};
+int main()
+{
+	int tail = 1, head = 1, startx, starty, endx, endy, flag = 0;
+	struct queue Oi[110];
+	scanf("%d %d", &n, &m);
+	getchar();
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
+			map[i][j] = getchar();
+			if (map[i][j] == 'S') {
+				startx = i;
+				starty = j;
+			}
+			else if (map[i][j] == 'T') {
+				endx = i;
+				endy = j;
+			}
+		}
+		getchar();
+	}
+	Book[startx][starty] = 1;
+	Oi[tail].x = startx;
+	Oi[tail].y = starty;
+	Oi[tail++].step = 0;
+	while (head < tail) {
+		for (int i = 0; i < 4; i++) {
+			int tempx = Oi[head].x + location[i][0];
+			int tempy = Oi[head].y + location[i][1];
+			if (map[tempx][tempy] != '*' && map[tempx][tempy] != '\0' && Book[tempx][tempy] == 0) {
+				Book[tempx][tempy] = 1;
+				Oi[tail].x = tempx;
+				Oi[tail].y = tempy;
+				Oi[tail].step = Oi[head].step + 1;
+				tail++;
+				if (tempx == endx && tempy == endy) {
+					flag = 1;
+					break;
+				}
+			}
+		}
+		if (flag) {
+			break;
+		}
+		head++;
+	}
+	if (head >= tail) Oi[tail - 1].step = -1;
+	printf("%d", Oi[tail - 1].step);
+	return 0;
+}

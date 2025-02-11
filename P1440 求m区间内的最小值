@@ -1,0 +1,28 @@
+#include <stdio.h>
+int n, m;
+long long arr[2000005];
+long long que[2000005];
+int left = 0;
+int right = 0;
+int main() {
+    scanf("%d %d", &n, &m);
+    for (int i = 1; i <= n; i++) {
+        scanf("%lld", &arr[i]);
+    }
+    for (int i = 1; i <= n; i++) {
+        if (i >= 2) {
+            printf("%d\n", arr[que[left]]);
+        }
+        else {
+            printf("0\n");
+        }
+        while (left != right && arr[i] < arr[que[right - 1]]) {
+            if (right > left) right--;
+        }
+        if (left != right && (i - que[left]) >= m) {
+            if (left < right) left++;
+        }
+        que[right++] = i;
+    }
+    return 0;
+}

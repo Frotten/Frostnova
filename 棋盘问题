@@ -1,0 +1,50 @@
+#include <stdio.h>
+int way;
+struct Book {
+	int x;
+	int y;
+};
+void BFS(struct Book* book, int *X, int *Y, int tack, int tar, int under, int k, int n) {
+	if (tack == k) {
+		way++;
+		return;
+	}
+	for (int i = under; i <= tar; i++) {
+		if (X[book[i].x] != 0 && Y[book[i].y] != 0) {
+			continue;
+		}
+		X[book[i].x] = 1;
+		Y[book[i].y] = 1;
+		BFS(book, X, Y, tack + 1, tar, i + 1, k, n);
+		X[book[i].x] = 0;
+		Y[book[i].y] = 0;
+	}
+}
+int main() {
+	int n, k, tar = 1;
+	char map[10][10] = { 0 };
+	struct Book book[110];
+	int Bok[110] = { 0 };
+	scanf("%d %d", &n, &k);
+	getchar();
+	while (n != -1 && k != -1) {
+		way = 0;
+		tar = 1;
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= n; j++) {
+				map[i][j] = getchar();
+				if (map[i][j] == '#') {
+					book[tar].x = i;
+					book[tar++].y = j;
+				}
+			}
+			getchar();
+		}
+		int X[10] = { 0 };
+		int Y[10] = { 0 };
+		BFS(book, X, Y, 0, tar - 1, 1, k, n);
+		printf("%d\n", way);
+		scanf("%d %d", &n, &k);
+		getchar();
+	}
+}

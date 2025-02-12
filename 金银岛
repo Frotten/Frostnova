@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct stone {
+	int wei;
+	int val;
+	double vlo;
+};
+int compar(const void* a, const void* b) {
+	struct stone* A = (struct stone*)a;
+	struct stone* B = (struct stone*)b;
+	if (A->vlo > B->vlo) return -1;
+	if (B->vlo > A->vlo) return 1;
+	return 0;
+}
+int main() {
+	int k;
+	scanf("%d", &k);
+	while (k-- > 0) {
+		int w ,s;
+		struct stone LO[110];
+		scanf("%d %d", &w ,&s);
+		for (int i = 1; i <= s; i++) {
+			scanf("%d %d", &LO[i].wei, &LO[i].val);
+			LO[i].vlo = (LO[i].val * 1.0) / (LO[i].wei * 1.0);
+		}
+		qsort(LO + 1, s, sizeof(struct stone), compar);
+		double sum = 0;
+		double sss = 0;
+		for (int i = 1; i <= s; i++) {
+			if (LO[i].wei + sum <= w) {
+				sum += LO[i].wei;
+				sss += LO[i].val;
+			}
+			else {
+				sss += (w - sum) * LO[i].vlo;
+				break;
+			}
+		}
+		printf("%.2lf\n", sss);
+	}
+	return 0;
+}

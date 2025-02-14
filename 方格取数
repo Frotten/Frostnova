@@ -1,0 +1,77 @@
+//#include <stdio.h>
+//int n, m, max = -9999999;
+//int book[1002][1002];
+//int map[1002][1002];
+//int dp[1002][1002];
+//void DFS(int sum, int startx, int starty) {
+//	int locat[3][2] = { {0,1},{-1,0},{1,0}};
+//	if (startx == n && starty == m) {
+//		if (sum > max) max = sum;
+//		return;
+//	}
+//	for (int i = 0; i < 3; i++) {
+//		int X = startx + locat[i][0];
+//		int Y = starty + locat[i][1];
+//		if (X > 0 && Y > 0 && X <= n && Y <= m && book[X][Y] == 0) {
+//			book[X][Y] = 1;
+//			DFS(sum + map[X][Y], X, Y);
+//			book[X][Y] = 0;
+//		}
+//	}
+//}
+//int main() {
+//	scanf("%d %d", &n, &m);
+//	for (int i = 1; i <= n; i++) {
+//		for (int j = 1; j <= m; j++) {
+//			scanf("%d", &map[i][j]);
+//			dp[i][j] = -999999;
+//		}
+//	}
+//	dp[1][1] = map[1][1];
+//	book[1][1] = 1;
+//	DFS(map[1][1], 1, 1);
+//	printf("%d", max);
+//	return 0;
+//}
+
+#include <stdio.h>
+int map[1002][1002];
+long long dp[1002][1002][2];
+int main() {
+	int n, m;
+	scanf("%d %d", &n, &m);
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
+			scanf("%d", &map[i][j]);
+		}
+	}
+	for (int i = 0; i <= n; i++) {
+		for (int j = 0; j <= m; j++) {
+			dp[i][j][0] = -99999999;
+			dp[i][j][1] = -99999999;
+		}
+	}
+	dp[1][1][0] = map[1][1];
+	dp[1][1][1] = map[1][1];
+	for (int i = 2; i <= n; i++) {
+		dp[i][1][0] = dp[i - 1][1][0] + map[i][1];
+	}
+	for (int j = 2; j <= m; j++) {
+		for (int i = 1; i <= n; i++) {
+			long long max = ((dp[i][j - 1][0] > dp[i][j - 1][1]) ? dp[i][j - 1][0] : dp[i][j - 1][1]) + map[i][j];//左
+			dp[i][j][0] = max;
+			dp[i][j][1] = max;
+		}
+		for (int i = 2; i <= n; i++) {
+			long long max = (dp[i - 1][j][0] + map[i][j] > dp[i][j][0]) ? dp[i - 1][j][0] + map[i][j] : dp[i][j][0];//上
+			dp[i][j][0] = max;
+		}
+		for (int i = n - 1; i >= 1; i--) {
+			long long max = (dp[i + 1][j][1] + map[i][j] > dp[i][j][1]) ? dp[i + 1][j][1] + map[i][j] : dp[i][j][1];//下
+			dp[i][j][1] = max;
+		}
+	}
+	long long max = (dp[n][m][0] > dp[n][m][1]) ? dp[n][m][0] : dp[n][m][1];
+	printf("%lld", max);
+	return 0;
+}

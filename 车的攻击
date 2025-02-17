@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <stdlib.h>
+long long X[1000005];
+long long Y[1000005];
+int compar(const void* a, const void* b) {
+	return *(long long*)a - *(long long*)b;
+}
+int main() {
+	long long N, K, row = 0, line = 0;
+	long long sum = 0;
+	scanf("%lld %lld", &N, &K);
+	for (long long i = 1; i <= K; i++) {
+		long long R, G;
+		scanf("%lld %lld", &R, &G);
+		X[i] = R;
+		Y[i] = G;
+	}
+	qsort(X + 1, K, sizeof(long long), compar);
+	qsort(Y + 1, K, sizeof(long long), compar);
+	for (long long i = 1; i <= K; i++) {
+		if (X[i] != X[i + 1]) row++;
+		if (Y[i] != Y[i + 1]) line++;
+	}
+	printf("%lld", row * N - row * line + line * N);
+	return 0;
+}

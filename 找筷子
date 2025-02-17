@@ -1,0 +1,13 @@
+#include <stdio.h>
+long long sul;
+int main() {
+	int n;
+	scanf("%d", &n);
+	for (int i = 1; i <= n; i++) {
+		long long temp;
+		scanf("%lld", &temp);
+		sul ^= temp;
+	}
+	printf("%lld", sul);
+	return 0;
+}

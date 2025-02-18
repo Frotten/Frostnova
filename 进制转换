@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int main() {
+    int ear, aft;
+    scanf("%d", &ear);
+    char tar[30] = { 0 };
+    scanf("%s", tar);
+    scanf("%d", &aft);
+    long long sum = strtoll(tar, NULL, ear);
+    if (sum == 0) {
+        printf("0");
+        return 0;
+    }
+    char Tal[30] = { 0 };
+    int count = 0;
+    while (sum > 0) {
+        int remainder = sum % aft;
+        if (remainder < 10) {
+            Tal[count++] = remainder + '0';
+        }
+        else {
+            Tal[count++] = remainder - 10 + 'A';
+        }
+        sum /= aft;
+    }
+    for (int i = count - 1; i >= 0; i--) {
+        printf("%c", Tal[i]);
+    }
+    return 0;
+}

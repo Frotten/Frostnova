@@ -1,0 +1,21 @@
+#include <stdio.h>//S=a1⊕a2⊕⋯⊕an,S！=0则先手必胜
+int main() {
+	int T;
+	scanf("%d", &T);
+	while (T--) {
+		int n, sum = 0;
+		scanf("%d", &n);
+		for (int i = 1; i <= n; i++) {
+			int temp;
+			scanf("%d", &temp);
+			sum ^= temp;
+		}
+		if (sum != 0) {
+			printf("Yes\n");
+		}
+		else {
+			printf("No\n");
+		}
+	}
+	return 0;
+}

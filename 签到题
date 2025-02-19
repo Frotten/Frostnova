@@ -1,0 +1,71 @@
+//#include <stdio.h>
+//#include <math.h>
+//#define MO 666623333
+//long long phi(long long x) {
+//    long long result = x;
+//    for (long long i = 2; i * i <= x; i++) {
+//        if (x % i == 0) {
+//            while (x % i == 0) {
+//                x /= i;
+//            }
+//            result -= result / i;
+//        }
+//    }
+//    if (x > 1) {
+//        result -= result / i;
+//    }
+//    return result;
+//}
+//int main() {
+//    unsigned long long l, r, sum = 0;
+//    scanf("%llu %llu", &l, &r);
+//    for (long long i = l; i <= r; i++) {
+//        sum += i - phi(i);
+//        sum %= MO;
+//    }
+//    printf("%llu", sum % MO);
+//    return 0;
+//}
+
+
+
+#include <stdio.h>//欧拉函数的累加实现
+#include <string.h>
+#define MAXN 1000005
+#define MOD 666623333
+long long l, r, ans;
+int cnt;
+int isprime[MAXN];
+long long prime[MAXN], A[MAXN], B[MAXN];//A,处理后的部分，B,处理时剩下的部分
+void shai() {//埃拉托尼斯特筛法
+    for (int i = 2; i <= MAXN; i++) {
+        if (!isprime[i]) prime[++cnt] = i;
+        for (int j = 2 * i; j <= MAXN; j += i)
+            isprime[j] = 1;
+    }
+}
+void work() {
+    int i = 1;
+    while (prime[i] * prime[i] <= r) {
+        long long p = prime[i];
+        for (int x = (p - l % p) % p; x <= r - l; x += p) {//(p - l % p) % p-> l--r范围内第一个p的倍数
+            A[x] /= p, A[x] *= p - 1;//x*(1-1/p)==x*p-1/p,表示这里的A[x]从x中有1/p个数是p的倍数变为去掉那部分倍数之后的数
+            while (B[x] % p == 0)
+                B[x] /= p;
+        }
+        i++;
+    }
+}
+int main() {
+    shai();
+    scanf("%lld %lld", &l, &r);
+    for (long long i = l; i <= r; i++)
+        A[i - l] = i, B[i - l] = i;
+    work();
+    for (int i = 0; i <= r - l; i++) {
+        if (B[i] != 1) A[i] /= B[i], A[i] *= (B[i] - 1);//去除可能未处理的因子
+        ans = (ans + i + l - A[i]) % MOD;
+    }
+    printf("%lld", ans);
+    return 0;
+}

@@ -1,0 +1,21 @@
+#include <stdio.h>
+int gcd(int x, int y) {
+    while (y != 0) {
+        int temp = y;
+        y = x % y;
+        x = temp;
+    }
+    return x;
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+    int olo = 0, tmp;
+    for (int i = 1; i <= n; i++) {
+        scanf("%d", &tmp);
+        if (tmp < 0) tmp = -tmp;
+        olo = gcd(olo, tmp);
+    }
+    printf("%d\n", olo);
+    return 0;
+}

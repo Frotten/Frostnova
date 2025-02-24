@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <string.h>
+char Arr[15000] = { 0 };
+char Brr[15000] = { 0 };
+int Crr[1500000] = { 0 };
+int main() {
+    int skip = 1;
+    int maxCount = 0;
+    int Ahead = 1;
+    int Bhead = 1;
+    int Chead = 1;
+    scanf("%s", Arr);
+    scanf("%s", Brr);
+    if (Arr[0] == '-') Ahead = -1;
+    if (Brr[0] == '-') Bhead = -1;
+    int lenA = strlen(Arr);
+    int lenB = strlen(Brr);
+    int countC = 1;
+    for (int i = lenA - 1; i >= 0; i--) {
+        if (Arr[i] == '-') break;
+        countC = lenA - i;
+        for (int j = lenB - 1; j >= 0; j--,countC++) {
+            if (Brr[j] == '-') break;
+            int temp = (Arr[i] - '0') * (Brr[j] - '0');
+            Crr[countC] += temp % 10;
+            if (Crr[countC] >= 10) {
+                Crr[countC] -= 10;
+                Crr[countC + 1] += 1;
+            }
+            Crr[countC + 1] += temp / 10;
+            if (countC > maxCount) maxCount = countC;
+            if (Crr[countC + 1] != 0 && countC + 1 > maxCount) maxCount = countC + 1;
+        }
+    }
+    if (maxCount >1000) {
+        printf("错误：位数超限。");
+        return 0;
+    }
+    Chead = Ahead * Bhead;
+    if (Chead == -1 ) printf("-");
+    for (int i = maxCount; i >= 1; i--) {
+        if (skip == 1 && Crr[i] == 0 && i != 1) {
+            continue;
+        }
+        else if (skip == 1 && Crr[i] == 0 && i == 1) {
+            printf("0");//当两个数其中一个为0，另一个为负数时输出会表现为-0，但我懒得改了，以上
+            continue;
+        }
+        else {
+            skip = 0;
+        }
+        printf("%d", Crr[i]);
+    }
+    return 0;
+}

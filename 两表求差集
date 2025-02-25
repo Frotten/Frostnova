@@ -1,0 +1,39 @@
+#include <stdio.h>
+int main() {
+    int T;
+    scanf("%d", &T);
+    while (T--) {
+        int flag = 0;
+        int arr[2000] = { 0 };
+        int brr[2000] = { 0 };
+        int heada, headb, count = 0;
+        scanf("%d", &heada);
+        for (int i = 0; i < heada; i++) {
+            scanf("%d", &arr[i]);
+        }
+        scanf("%d", &headb);
+        for (int i = 0; i < headb; i++) {
+            scanf("%d", &brr[i]);
+        }
+        for (int i = 0; i < heada; i++) {
+            while (count < headb && brr[count] < arr[i]) {
+                count++;
+            }
+            if (count >= headb || arr[i] != brr[count]) {
+                if (flag == 0) {
+                    flag = 1;
+                    printf("%d", arr[i]);
+                    continue;
+                }
+                printf(" %d", arr[i]);
+            }
+            else {
+                count++;
+            }
+        }
+        if (T >= 1) {
+            printf("\n");
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,46 @@
+#include <stdio.h>
+struct queue {
+    int x;
+    int y;
+    int f;
+};
+int map[20][20], Book[20][20];
+int locat[8][2] = { {1,0},{-1,0},{0,1},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1} };
+int main() {
+    struct queue lloo[400];
+    int n, startx, starty, endx, endy, head = 1, tail = 1;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &map[i][j]);
+        }
+    }
+    scanf("%d %d %d %d", &startx, &starty, &endx, &endy);
+    lloo[tail].x = startx;
+    lloo[tail].y = starty;
+    lloo[tail++].f = 0;
+    Book[startx][starty] = 1;
+    while (head < tail) {
+        for (int i = 0; i < 8; i++) {
+            int X = lloo[head].x + locat[i][0];
+            int Y = lloo[head].y + locat[i][1];
+            if (X < n && X >= 0 && Y < n && Y >= 0 && Book[X][Y] == 0 && map[X][Y] == 0) {
+                Book[X][Y] = 1;
+                lloo[tail].x = X;
+                lloo[tail].y = Y;
+                lloo[tail].f = head;
+                if (X == endx && Y == endy) {
+                    head = tail;
+                    break;
+                }
+                tail++;
+            }
+        }
+        head++;
+    }
+    while (tail != 0) {
+        printf("%d %d;", lloo[tail].x, lloo[tail].y);
+        tail = lloo[tail].f;
+    }
+    return 0;
+}

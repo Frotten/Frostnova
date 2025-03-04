@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int climbStairs(int n) {
+        using namespace std;
+        vector<int> staris(n+1);
+        staris[0] = 0;
+        staris[1] = 1;
+        if(n >= 2){
+        staris[2] = 2;
+        for(int i = 3;i<=n;i++){
+            staris[i] = staris[i - 1] + staris[i - 2];
+        }
+        }
+        return staris[n];
+    }
+};

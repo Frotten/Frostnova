@@ -1,0 +1,25 @@
+#include <iostream>//输入流头文件（cin，cout
+#include <algorithm>//算法库（max,min,sort
+#include <cstdio>//原版C语言标准库(原汁原味
+#include <string>
+#include <cmath>//C语言的math库
+using namespace std;//标准命名空间，可以让标准库的函数（比如下面那些）去掉std::的前缀
+int main() {
+	int a = 10;
+	char temp[] = "Ending Dream";
+	std::cout << "这是一个要被输出的字符串"<<std::endl
+	<< "这是一个没有换行符的字符串"
+	<< "<-的确没有换行" << std::endl
+	<< "接下来尝试输入：" << temp << "和" << a << std::endl
+	<< "现在试着改变a代表的值：";
+	std::cin >> a;
+	std::cout <<"a现在的值是：" << a<<std::endl;
+	std::cout << "现在试着改变temp代表的值：";
+	std::cin >> temp;
+	std::cout << "Temp现在的值是：" << temp << std::endl;
+	std::string line;//用std::string 声明一个名为line的字符数组（自动划分内存
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // 清除输入缓冲区中的剩余字符
+	std::getline(std::cin, line);//读取内容到line中，可以读取空格
+	std::cout << line;
+	return 0;
+}

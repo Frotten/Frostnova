@@ -1,0 +1,32 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int test(vector<int>& temp) {
+    int sum = 0, time = 0;
+    for (int& x : temp) {
+        cin >> x;
+        sum += x;
+    }
+    vector<vector<int>> dp(temp.size() + 1, vector<int>(sum / 2 + 1, 0));
+    for (int i = 1; i <= temp.size(); i++) {
+        for (int j = sum / 2; j >= temp[i - 1]; j--) {
+            dp[i][j] = max(dp[i][j], dp[i - 1][j - temp[i - 1]] + temp[i - 1]);
+        }
+        for (int j = 0; j <= sum / 2; j++) {
+            dp[i][j] = max(dp[i][j], dp[i - 1][j]);
+        }
+    }
+    for (int j = 0; j <= sum / 2; j++) {
+        time = max(time, dp[temp.size()][j]);
+    }
+    return max(time, sum - time);
+}
+int main() {
+    int s1, s2, s3, s4;
+    cin >> s1 >> s2 >> s3 >> s4;
+    vector<int> A1(s1), B2(s2), C3(s3), D4(s4);
+    int result = test(A1) + test(B2) + test(C3) + test(D4);
+    cout << result;
+    return 0;
+}

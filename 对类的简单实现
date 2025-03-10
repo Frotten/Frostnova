@@ -1,0 +1,34 @@
+#include <iostream>//输入流头文件（cin，cout
+#include <algorithm>//算法库（max,min,sort
+#include <cstdio>//原版C语言标准库(原汁原味
+#include <string>
+#include <iomanip>
+#include <cmath>//C语言的math库
+#define PI 3.1415926535
+using namespace std;//标准命名空间，可以让标准库的函数（比如下面那些）去掉std::的前缀
+class Temp {
+public:
+	double circumference_of_circle() {
+		return 2.0 * PI * R;
+	}
+	double getR() {
+		return R;
+	}
+	void AddR() {
+		this->R += 2;
+	}
+	int getlen() {
+		return length;
+	}
+	int BUS = 999;
+private:
+	double R = 5.0;
+	int length = 9;
+};
+int main() {
+	Temp One;
+	cout << fixed << setprecision(2)<<One.getR() << endl;
+	One.AddR();
+	cout << fixed << setprecision(2) << One.getR() << endl;
+	return 0;
+}

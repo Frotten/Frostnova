@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<string> Target;
+    void DFS(string Temp,int left,int right){
+        if(left == 0 && right == 0){
+            Target.push_back(Temp);
+            return;
+        }
+        if(left > right || left < 0){
+            return;
+        }
+        DFS(Temp + '(',left - 1,right);
+        DFS(Temp + ')',left,right - 1);
+    }
+    vector<string> generateParenthesis(int n) {
+        DFS("",n,n);
+        return Target;
+    }
+};

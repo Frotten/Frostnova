@@ -1,0 +1,22 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+int main() {
+	using namespace std;
+	int T, M;
+	cin >> T >> M;
+	vector<int> W(M + 1, 0);
+	vector<int> Q(M + 1, 0);
+	vector<vector<int>> DP(M + 1, vector<int>(T + 1, 0));
+	for (int i = 1; i <= M; i++) {
+		cin >> W[i] >> Q[i];
+	}
+	for (int i = 1; i <= M; i++) {
+		for (int j = 0; j <= T; j++) {
+			DP[i][j] = DP[i - 1][j];
+			if (j >= W[i])DP[i][j] = max(DP[i][j], DP[i - 1][j - W[i]] + Q[i]);
+		}
+	}
+	cout << DP[M][T];
+	return 0;
+}

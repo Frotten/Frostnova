@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <stack>
+#include <algorithm>
+int main() {
+	using namespace std;
+	string Tar;
+	cin >> Tar;
+	stack<int> Num;
+	int temp = 0;
+	for (char& x : Tar) {
+		if (x >= '0' && x <= '9') {
+			temp = temp * 10 + (x - '0');
+		}
+		else if (x == '.') {
+			Num.push(temp);
+			temp = 0;
+		}
+		else if (x == '*') {
+			int a = Num.top();
+			Num.pop();
+			int b = Num.top();
+			Num.pop();
+			Num.push(a * b);
+		}
+		else if (x == '+') {
+			int a = Num.top();
+			Num.pop();
+			int b = Num.top();
+			Num.pop();
+			Num.push(a + b);
+		}
+		else if (x == '-') {
+			int a = Num.top();
+			Num.pop();
+			int b = Num.top();
+			Num.pop();
+			Num.push(b - a);
+		}
+		else if (x == '/') {
+			int a = Num.top();
+			Num.pop();
+			int b = Num.top();
+			Num.pop();
+			Num.push(b / a);
+		}
+		else if (x == '@') {
+			break;
+		}
+	}
+	cout << Num.top();
+	return 0;
+}

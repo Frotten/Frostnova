@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <list>
+bool ER[100001];
+using Ilter = std::list<int>::iterator;//list的迭代器，可储存对应的指针（？
+Ilter Pos[100001];
+void Insertli(std::list<int>& Tar, int i, int k, int p,int n) {
+	if (!p) {
+		Pos[i] = Tar.insert(Pos[k], i);//保存这个插入的节点
+	}
+	else {
+		auto nextNode = next(Pos[k]);
+		Pos[i] = Tar.insert(nextNode, i);
+	}
+}
+int main() {
+	using namespace std;
+	int n, M;
+	cin >> n;
+	list<int> Tar;
+	Tar.push_back(1);
+	Pos[1] = Tar.begin();
+	for (int i = 2; i <= n; i++) {
+		int k, p;
+		cin >> k >> p;
+		Insertli(Tar, i, k, p, n);
+	}
+	cin >> M;
+	for (int i = 0; i < M; i++) {
+		int x;
+		cin >> x;
+		if (!ER[x]) {
+			Tar.erase(Pos[x]);//erase直接通过Pos的指针删除目标节点而不是靠remove的O(n)超绝慢速遍历
+			//对于把时间复杂度从O(n^2)打到O(n)有着划时代性的进步
+			ER[x] = 1;
+		}
+	}
+	for (int& x : Tar) {
+		cout << x << ' ';
+	}
+	return 0;
+}

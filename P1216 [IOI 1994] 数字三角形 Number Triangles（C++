@@ -1,0 +1,23 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+int main() {
+	using namespace std;
+	int r;
+	cin >> r;
+	vector<vector<int>> Triangle;
+	for (int i = 1; i <= r; i++) {
+		vector<int> Temp(i, 0);
+		for (int& x : Temp) {
+			cin >> x;
+		}
+		Triangle.push_back(Temp);
+	}
+	for (int i = r - 2; i >= 0; i--) {
+		for (int j = 0; j <= i; j++) {
+			Triangle[i][j] = max(Triangle[i + 1][j] + Triangle[i][j], Triangle[i + 1][j + 1] + Triangle[i][j]);
+		}
+	}
+	cout << Triangle[0][0];
+	return 0;
+}

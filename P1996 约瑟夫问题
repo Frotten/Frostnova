@@ -1,0 +1,47 @@
+#include <iostream>
+#include <list>
+#include <stack>
+#include <vector>
+#include <algorithm>
+typedef struct ListNode {
+	int val;
+	struct ListNode* prev;
+	struct ListNode* next;
+}Node;
+Node* Add(int n) {
+	Node* New = new Node;
+	New->val = n;
+	New->next = NULL;
+	New->prev = NULL;
+	return New;
+}
+void Dele(Node* New) {
+	New->prev->next = New->next;
+	New->next->prev = New->prev;
+	delete(New);
+}
+int main() {
+	using namespace std;
+	int n, m, count = 0;
+	cin >> n >> m;
+	Node* First = Add(1);
+	Node* prev = First;
+	for (int i = 2; i <= n; i++) {
+		Node* New = Add(i);
+		New->prev = prev;
+		prev->next = New;
+		prev = New;
+	}
+	prev->next = First;
+	First->prev = prev;
+	while (count != n) {
+		for (int i = 1; i < m; i++) {
+			First = First->next;
+		}
+		cout << First->val << ' ';
+		First = First->next;
+		Dele(First->prev);
+		count++;
+	}
+	return 0;
+}

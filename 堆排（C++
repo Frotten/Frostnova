@@ -1,0 +1,41 @@
+#include <iostream>
+void swap(int a, int b, int* arr) {
+	int temp = arr[a];
+	arr[a] = arr[b];
+	arr[b] = temp;
+}
+void siftdown(int* arr, int num, int n) {
+	int temp = n;
+	while (n * 2 <= num) {
+		if (arr[n] < arr[n * 2]) temp = n * 2;
+		if (n * 2 + 1 <= num && arr[temp] < arr[n * 2 + 1]) temp = n * 2 + 1;
+		if (temp != n) {
+			swap(n, temp, arr);
+			n = temp;
+		}
+		else {
+			break;
+		}
+	}
+}
+void creat(int* arr,int num) {
+	for (int i = num / 2; i >= 1; i--) {
+		siftdown(arr, num, i);
+	}
+}
+void heapsort(int* arr, int num) {
+	while (num > 1) {
+		swap(1, num, arr);
+		num--;
+		siftdown(arr, num, 1);
+	}
+}
+int main() {
+	int arr[] = { 0,10,3,6,9,4,8,7,5,1,2 };
+	creat(arr, sizeof(arr)/sizeof(arr[0]) - 1);//建堆
+	heapsort(arr, sizeof(arr) / sizeof(arr[0]) - 1);
+	for (int& x : arr) {
+		std::cout << x << ' ';
+	}
+	return 0;
+}

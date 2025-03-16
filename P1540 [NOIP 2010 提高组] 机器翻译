@@ -1,0 +1,25 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <deque>
+#include <algorithm>
+int main() {
+	using namespace std;
+	int M, N, count = 0;
+	cin >> M >> N;
+	vector<int> Tar(N + 1, 0);
+	deque<int> Nei;
+	for (int i = 1; i <= N; i++) cin >> Tar[i];
+	for (int i = 1; i <= N; i++) {
+		auto it = find(Nei.begin(), Nei.end(), Tar[i]);
+		if (it == Nei.end()) {
+			count++;
+			Nei.push_front(Tar[i]);
+			while (Nei.size() > M) {
+				Nei.pop_back();
+			}
+		}
+	}
+	cout << count;
+	return 0;
+}

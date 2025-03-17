@@ -1,0 +1,44 @@
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <stack>
+typedef struct Sta {
+	char kuoh;
+	int xiab;
+}Stal;
+int main() {
+	using namespace std;
+	string Tar;
+	cin >> Tar;
+	vector<int> Ril(Tar.size() + 1, 0);
+	vector<Stal> Stalo(Tar.size() + 1);
+	int count = 0;
+	for (int i = 0; i < Tar.size();i++) {
+		if (Tar[i] == '(' || Tar[i] == '[') {
+			Stalo[++count].kuoh = Tar[i];
+			Stalo[count].xiab = i;
+		}
+		else {
+			if ((Tar[i] == ')' && Stalo[count].kuoh == '(') || (Tar[i] == ']' && Stalo[count].kuoh == '[')) {
+				Ril[i]++;
+				Ril[Stalo[count].xiab]++;
+				count--;
+			}
+		}
+	}
+	for (int i = 0; i < Tar.size(); i++) {
+		if (Ril[i] == 0) {
+			if (Tar[i] == '(' || Tar[i]==')') {
+				cout << "()";
+			}
+			else {
+				cout << "[]";
+			}
+		}
+		else {
+			cout << Tar[i];
+		}
+	}
+	return 0;
+}

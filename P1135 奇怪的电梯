@@ -1,0 +1,49 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <vector>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+int N, A, B, minl = 999999, Gaiz = -1;
+void DFS(int* Tar, int* Dis, int now, int count) {
+	Dis[now] = count;
+	if (count >= minl) return;
+	if (now == B) {
+		if (count < minl) {
+			minl = count;
+			Gaiz = 1;
+		}
+		return;
+	}
+	if (Tar[now] == 0) return;
+	bool flag = true;
+	int temp = now - Tar[now];
+	if (temp >= 1 && Dis[temp] > count + 1) {
+		DFS(Tar, Dis, temp, count + 1);
+		flag = false;
+	}
+	temp = now + Tar[now];
+	if (temp <= N && Dis[temp] > count + 1) {
+		DFS(Tar, Dis, temp, count + 1);
+		flag = false;
+	}
+	if (flag) return;
+}
+int main() {
+	cin >> N >> A >> B;
+	int Tar[205];
+	int Dis[205];
+	for (int i = 1; i <= N; i++) {
+		cin >> Tar[i];
+	}
+	memset(Dis, 999999, sizeof(Dis));
+	DFS(Tar, Dis, A, 0);
+	if (Gaiz == -1) {
+		cout << Gaiz;
+	}
+	else {
+		cout << minl;
+	}
+	return 0;
+}

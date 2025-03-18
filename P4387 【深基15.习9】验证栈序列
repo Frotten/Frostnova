@@ -1,0 +1,43 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <string>
+using namespace std;
+int main() {
+	int t;
+	cin >> t;
+	while (t--) {
+		int n;
+		cin >> n;
+		stack<int> Out;
+		vector<int> A1;
+		vector<int> B2;
+		int count = 0;
+		for (int i = 0; i < n; i++) {
+			int temp;
+			cin >> temp;
+			A1.push_back(temp);
+		}
+		for (int i = 0; i < n; i++) {
+			int temp;
+			cin >> temp;
+			B2.push_back(temp);
+		}
+		for (int i = 0; i < n; i++) {
+			Out.push(A1[i]);
+			while (Out.top() == B2[count]) {
+				count++;
+				Out.pop();
+				if (Out.empty())break;
+			}
+		}
+		if (Out.empty()) {
+			cout << "Yes" << endl;
+		}
+		else {
+			cout << "No" << endl;
+		}
+	}
+	return 0;
+}

@@ -1,0 +1,41 @@
+#include <iostream>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <queue>
+using namespace std;
+int arr[30] = { 0 };
+bool Sushu[5000005] = { false };
+int n, k, allsum = 0;
+void DFS(int nowsum,int nowcount,int upwor) {
+	if (nowcount == k) {
+		if (Sushu[nowsum] == false) {
+			allsum++;
+		}
+		return;
+	}
+	if (n - upwor + 1 + nowcount < k) return;
+	DFS(nowsum + arr[upwor], nowcount + 1, upwor + 1);
+	DFS(nowsum, nowcount, upwor + 1);
+}
+int main() {
+	int maxl = 0;
+	cin >> n >> k;
+	for (int i = 1; i <= n; i++) {
+		cin >> arr[i];
+		if (maxl < arr[i]) maxl = arr[i];
+	}
+	Sushu[0] = true;
+	Sushu[1] = true;
+	for (int i = 2; i <= maxl * k; i++) {
+		if (Sushu[i] == false) {
+			for (int j = i * i; j <= maxl * k; j += i) {
+				Sushu[j] = true;
+			}
+		}
+	}
+	DFS(0, 0, 1);
+	cout << allsum;
+	return 0;
+}

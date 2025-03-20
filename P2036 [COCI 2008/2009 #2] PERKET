@@ -1,0 +1,29 @@
+#include <iostream>//酸度（first为乘积，苦度（second为和
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <cmath>
+using namespace std;
+pair<int, int> Fol[15];
+int n, minl = 999999;
+void DFS(int upwor, int Aciditysum, int Bittersum, int snum) {
+	if (upwor > n + 1) return;
+	if (abs(Aciditysum - Bittersum) < minl && snum != 0) {
+		minl = abs(Aciditysum - Bittersum);
+	}
+	if (snum == 0) {
+		DFS(upwor + 1, Fol[upwor].first, Bittersum + Fol[upwor].second, snum + 1);
+	}
+	else {
+		DFS(upwor + 1, Aciditysum * Fol[upwor].first, Bittersum + Fol[upwor].second, snum + 1);
+	}
+	DFS(upwor + 1, Aciditysum, Bittersum, snum);
+}
+int main() {
+	cin >> n;
+	for (int i = 1; i <= n; i++) {
+		cin >> Fol[i].first >> Fol[i].second;
+	}
+	DFS(1, 0, 0, 0);
+	cout << minl;
+}

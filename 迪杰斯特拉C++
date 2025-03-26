@@ -1,0 +1,49 @@
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
+#define MAX 999999
+using namespace std;
+int start, ending;
+int map[10][10];
+bool Book[10] = { false };
+int main() {
+	int Point, Ways;
+	cout << "输入点的数量和路径数量：";
+	cin >> Point >> Ways;
+	memset(map, MAX, sizeof(map));
+	for (int i = 0; i < 10; i++) map[i][i] = 0;
+	cout << "<路径起点,路径终点,权值>:" << endl;
+	for (int i = 0; i < Ways; i++) {
+		int v1, v2, weight;
+		cin >> v1 >> v2 >> weight;
+		map[v1][v2] = weight;
+		map[v2][v1] = weight;
+	}
+	int Waymin[10] = { 0 };
+	cout << "输入起点和终点：";
+	cin >> start >> ending;
+	for (int i = 1; i <= Point; i++) {
+		Waymin[i] = map[start][i];
+	}
+	Book[start] = true;
+	for (int i = 1; i <= Point - 1; i++) {
+		int minl = MAX, locat = 0;
+		for (int j = 1; j <= Point; j++) {
+			if (Book[j] == false && Waymin[j] < minl) {
+				minl = Waymin[j];
+				locat = j;
+			}
+		}
+		Book[locat] = true;
+		for (int j = 1; j <= Point; j++) {
+			if (map[locat][j] < MAX) {
+				if (Waymin[j] > Waymin[locat] + map[locat][j]) {
+					Waymin[j] = Waymin[locat] + map[locat][j];
+				}
+			}
+		}
+	}
+	cout << Waymin[ending];
+	return 0;
+}

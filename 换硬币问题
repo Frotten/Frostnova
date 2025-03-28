@@ -1,0 +1,21 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+int main()
+{
+	int arr[4047] = { 0 };
+	for (int i = 1; i <= 2023; i++) {
+		for (int j = i + 1; j <= 2023; j++) {
+			arr[i + j] += i;
+		}
+	}
+	int maxl = 0, updown = 0;
+	for (int i = 1; i <= 4047;i++) {
+		if (maxl < arr[i]) {
+			maxl = arr[i];
+			updown = i;
+		}
+	}
+	cout << maxl << endl << updown;
+	return 0;
+}

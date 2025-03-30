@@ -1,0 +1,34 @@
+class Solution {
+public:
+    vector<int> Point;
+    int flag = 1;
+    void Inorder(TreeNode* root){
+        if(root != nullptr){
+            for(int & i:Point){
+                if(i == root->val){
+                    flag = 0;
+                    return;
+                }
+            }
+            Point.push_back(root->val);
+            Inorder(root->left);
+            Inorder(root->right);
+        }
+    }
+    bool testval(int data,TreeNode* root){
+        if(root == nullptr) return false;
+        if(data == root->val) return true;
+        if(data > root->val) return testval(data,root->right);
+        else return testval(data,root->left);
+    }
+    bool isValidBST(TreeNode* root) {
+        Inorder(root);
+        if(flag == 0)return false;
+        for(int & data:Point){
+            if(testval(data,root) == false){
+                return false;
+            }
+        }
+        return true;
+    }
+};

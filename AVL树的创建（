@@ -1,0 +1,148 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <cmath>
+typedef struct TreeNode {
+	struct TreeNode* Left, * Right;
+	int val;
+	int BF;
+	struct TreeNode() { Left = NULL; Right = NULL; val = 0; BF = 0; }
+	struct TreeNode(int data) { Left = NULL; Right = NULL; val = data; BF = 0; }
+}AVL;
+void R_Rotate(AVL** root) {
+	AVL* lchild = (*root)->Left;
+	(*root)->Left = lchild->Right;
+	lchild->Right = (*root);
+	(*root) = lchild;
+}
+void L_Rotate(AVL** root) {
+	AVL* rchild = (*root)->Right;
+	(*root)->Right = rchild->Left;
+	rchild->Left = (*root);
+	(*root) = rchild;
+}
+void LeftBalance(AVL** root) {
+	AVL* L, *Lr;
+	L = (*root)->Left;
+	switch (L->BF) {
+	case 1: {
+		(*root)->BF = 0;
+		L->BF = 0;
+		R_Rotate(root);
+		break;
+	}
+	case -1: 
+		Lr = L->Right;
+		switch (Lr->BF) {
+		case 1: {
+			(*root)->BF = -1;
+			L->BF = 0;
+			break;
+		}
+		case 0: {
+			(*root)->BF = 0;
+			L->BF = 0;
+			break;
+		}
+		case -1:
+			(*root)->BF = 0;
+			L->BF = 1;
+			break;
+		}
+		Lr->BF = 0;
+		L_Rotate(&(*root)->Left);
+		R_Rotate(root);
+	}
+}
+void RightBalance(AVL** root) {
+	AVL* R, * Rl;
+	R = (*root)->Right;
+	switch (R->BF) {
+	case -1:
+		(*root)->BF = 0;
+		R->BF = 0;
+		L_Rotate(root);
+		break;
+	case 1:
+		Rl = R->Left;
+		switch (Rl->BF) {
+		case -1:
+			(*root)->BF = 1;
+			R->BF = 0;
+			break;
+		case 0:
+			(*root)->BF = 0;
+			R->BF = 0;
+			break;
+		case 1:
+			(*root)->BF = 0;
+			R->BF = -1;
+			break;
+		}
+		Rl->BF = 0;
+		R_Rotate(&(*root)->Right);
+		L_Rotate(root);
+		break;
+	}
+}
+bool InsertAVL(AVL** root, int val, bool* TAG) {
+	if ((*root) == nullptr) {//如果没有对应节点就直接创建
+		(*root) = new AVL(val);
+		*TAG = true;
+	}
+	else {
+		if (val == (*root)->val) {
+			*TAG = false;
+			return false;
+		}
+		else {
+			if (val < (*root)->val) {
+				if (InsertAVL(&(*root)->Left, val, TAG) == false) return false;//查重，同时进行额外创建
+				if (*TAG == true) {
+					switch ((*root)->BF) {
+					case 1:
+						LeftBalance(root);
+						*TAG = false;
+						break;
+					case 0:
+						(*root)->BF = 1;
+						*TAG = true;
+						break;
+					case -1:
+						(*root)->BF = 0;
+						*TAG = false;
+						break;
+					}
+				}
+			}
+			else {
+				if (InsertAVL(&(*root)->Right, val, TAG) == false) return false;
+				if (*TAG == true) {
+					switch ((*root)->BF) {
+					case 1:
+						(*root)->BF = 0;
+						*TAG = false;
+						break;
+					case 0:
+						(*root)->BF = -1;
+						*TAG = true;
+						break;
+					case -1:
+						RightBalance(root);
+						*TAG = false;
+						break;
+					}
+				}
+			}
+		}
+	}
+	return true;
+}
+int main() {
+	int arr[9] = { 1,6,9,3,2,4,5,7,8 };
+	AVL* root = NULL;
+	bool TAG = false;
+	for (int i = 0; i < 9; i++) {
+		InsertAVL(&root, arr[i], &TAG);
+	}
+}

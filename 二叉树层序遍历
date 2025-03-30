@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> ALL;
+        if(root == nullptr) return ALL; 
+        queue<TreeNode*> QUE;
+        QUE.push(root);
+        while(!QUE.empty()){
+            int sizel = QUE.size();
+            ALL.push_back(vector<int>());
+            for(int i = 0;i<sizel;i++){
+                auto it = QUE.front();
+                QUE.pop();
+                ALL.back().push_back(it->val);
+                if(it->left) QUE.push(it->left);
+                if(it->right) QUE.push(it->right);
+            }
+        }
+        return ALL;
+    }
+};

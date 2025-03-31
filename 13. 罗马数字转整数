@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int romanToInt(string s) {
+        map<char,int> LIST;
+        LIST['I'] = 1;
+        LIST['V'] = 5;
+        LIST['X'] = 10;
+        LIST['L'] = 50;
+        LIST['C'] = 100;
+        LIST['D'] = 500;
+        LIST['M'] = 1000;
+        int sum=0;
+        char lastone = 0;
+        for(char & X:s){
+            if(X!='I' && (lastone == 'I' || lastone =='X' || lastone =='C')){
+                if(LIST[X] > 1 && LIST[X] <= 10 && lastone == 'I') sum += LIST[X] - 1;
+                else if(LIST[X] > 10 && LIST[X] <= 100 && lastone == 'X') sum += LIST[X] - 10;
+                else if(LIST[X] > 100 && LIST[X] <= 1000 && lastone == 'C') sum += LIST[X] - 100;
+                else{
+                    sum += LIST[lastone];
+                    lastone = X;
+                    continue;
+                }
+                lastone = 0;
+            }else{
+                sum += LIST[lastone];
+                lastone = X;
+            }
+        }
+        sum += LIST[lastone];
+        return sum;
+    }
+};

@@ -1,0 +1,39 @@
+class Solution {
+public:
+    vector<int> InList;
+    int trun = 2;
+    void Inorder(TreeNode* root){
+        if(root != nullptr){
+            Inorder(root->left);
+            InList.push_back(root->val);
+            Inorder(root->right);
+        }
+    }
+    void Cover(TreeNode* root,int x,int y){
+        if(root != nullptr){
+            Cover(root->left,x,y);
+            if((root->val == x || root->val == y) && trun != 0){
+                if(trun == 2) root->val =min(x,y);
+                if(trun == 1) root->val =max(x,y);
+                trun--;
+            }
+            if(trun == 0) return;
+            Cover(root->right,x,y);
+        }
+    }
+    void recoverTree(TreeNode* root) {
+        Inorder(root);
+        int x = 0,y = 0;
+        for(int i = 1;i<InList.size();i++){
+            if(InList[i] < InList[i - 1]){
+                y = InList[i];
+                if(x == 0){
+                    x = InList[i - 1];
+                }else{
+                    break;
+                }
+            }
+        }
+        Cover(root,x,y);
+    }
+};

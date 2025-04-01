@@ -1,0 +1,11 @@
+class Solution {
+public:
+    long long mostPoints(vector<vector<int>>& questions) {
+        int Ques = questions.size();
+        vector<long long> DP(Ques + 1);
+        for(int i = Ques - 1;i >= 0;i--){
+            DP[i] = max(DP[i + 1],questions[i][0] + DP[min(Ques,i + questions[i][1] + 1)]);
+        }
+        return DP[0];
+    }
+};

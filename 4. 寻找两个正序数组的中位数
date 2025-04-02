@@ -1,0 +1,65 @@
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int size1 = nums1.size();
+        int size2 = nums2.size();
+        int sizeall = size1 + size2;
+        int halfsize = sizeall / 2;
+        int a = 0,b = 0,tar1 = 1000001,tar2 = 1000001;
+        for(int i = 1;i<=halfsize + 1;i++){
+            if(a >= size1){
+                if(i==halfsize){
+                    tar1 = nums2[b];
+                    b++;
+                }
+                else if(i == halfsize + 1){
+                    tar2 = nums2[b];
+                    b++;
+                }else{
+                    b++;
+                }
+            }
+            else if(b >= size2) {
+                if(i==halfsize){
+                    tar1 = nums1[a];
+                    a++;
+                }
+                else if(i == halfsize + 1){
+                    tar2 = nums1[a];
+                    a++;
+                }else a++;
+            }
+            else{
+                if(i == halfsize){
+                    if(nums1[a] > nums2[b]) {
+                        tar1 = nums2[b];
+                        b++;
+                    }
+                    else{
+                        tar1 = nums1[a];
+                        a++;
+                    }
+                }
+                else if(i == halfsize + 1){
+                    if(nums1[a] > nums2[b]) {
+                        tar2 = nums2[b];
+                        b++;
+                    }
+                    else{
+                        tar2 = nums1[a];
+                        a++;
+                    }
+                }
+                else{
+                    if(nums1[a] > nums2[b]) b++;
+                    else a++;
+                }
+            }
+        }
+        if(sizeall % 2 == 0){
+            return (double)(tar1 + tar2)/2.0;
+        }else{
+            return (double)tar2;
+        }
+    }
+};

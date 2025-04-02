@@ -1,4 +1,4 @@
-class Solution {
+class Solution {//O(n^3)
 public:
     long long maximumTripletValue(vector<int>& nums) {
         long long sizel = nums.size();
@@ -12,6 +12,31 @@ public:
                     if((a - b) * c > ans) ans = (a-b)*c;
                 }
             }
+        }
+        if(ans < 0) ans = 0;
+        return ans;
+    }
+};
+class Solution {//O(n)
+public:
+    long long maximumTripletValue(vector<int>& nums) {
+        int sizel = nums.size();
+        long long ans = 0;
+        vector<int> Maxi(sizel,0);
+        Maxi[0] = nums[0];
+        vector<int> Maxk(sizel,0);
+        Maxk[sizel - 1] = nums[sizel - 1];
+        for(int i = 1;i < sizel;i++){
+            Maxi[i] = max(Maxi[i - 1],nums[i]);
+        }
+        for(int i = sizel - 2;i >=0;i--){
+            Maxk[i] = max(Maxk[i + 1],nums[i]);
+        }
+        for(int i = 1;i < sizel - 1;i++){
+            long long a = Maxi[i - 1];
+            long long b = nums[i];
+            long long c = Maxk[i + 1];
+            if((a - b) * c > ans) ans = (a - b) * c;
         }
         if(ans < 0) ans = 0;
         return ans;

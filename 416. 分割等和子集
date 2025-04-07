@@ -1,0 +1,22 @@
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int sum = 0;
+        for(int & X :nums){
+            sum +=X;
+        }
+        if(sum % 2 != 0) return false;
+        sum /= 2;
+        int sizel = nums.size();
+        int maxl = *max_element(nums.begin(),nums.end());
+        if(maxl > sum) return false;
+        vector<int> DP(sum + 1, 0);
+        DP[0] = 1;
+        for(int i = 1;i < sizel;i++){
+            for(int j = sum;j >= nums[i];j--){
+                DP[j] |= DP[j - nums[i]];
+            }
+        }
+        return DP[sum];
+    }
+};

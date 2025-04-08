@@ -1,0 +1,17 @@
+#include <iostream>
+using namespace std;
+int n,ans = 0;
+void DFS(int val){
+  ans++;
+  if(val == 0 || val == 1)return;
+  for(int i = 1;i<=val/2;i++){
+    DFS(i);
+  }
+}
+int main()
+{
+  cin >> n;
+  DFS(n);
+  cout << ans;
+  return 0;
+}

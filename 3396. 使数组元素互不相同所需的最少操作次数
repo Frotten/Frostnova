@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int minimumOperations(vector<int>& nums) {
+	    int ans = 0;
+	    int sizel = nums.size();
+	    int start = 0;
+	    vector<int> Tone(105, 0);
+	    bool choice = true;
+     	for (int & X : nums) {
+	    	Tone[X]++;
+	    }
+	    while (choice) {
+	    	choice = false;
+	    	for (int X = start; X < sizel; X++) {
+				if (Tone[nums[X]] > 1) {
+					choice = true;
+					ans++;
+					for (int i = 0; i < 3; i++) {
+                        if(start + i < sizel){
+					    	Tone[nums[start + i]]--;
+                        }
+					}
+					start += 3;
+					break;
+				}
+			}
+		}
+    	return ans;
+    }
+};

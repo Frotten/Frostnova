@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+using namespace std;
+int main()
+{
+    int N;
+    cin >> N;
+    vector<int> Tar(N + 1, 0);
+    bool Book[110] = { false };
+    for (int i = 0; i < N; i++) {
+        cin >> Tar[i];
+        Book[Tar[i]] = true;
+    }
+    int maxl = 0;
+    int nowcount = 0;
+    int count = 0;
+    for (int i = 0; i < N; i++) {
+        if (count > maxl) maxl = count;
+        count = 0;
+        nowcount = 0;
+        for (int j = 0; j <= N; j++) Book[j] = true;
+        int flag = 0;
+        for (int R = 0; R < 100000; R++) {//循环次数太少，不足以支持找完所有数字
+            int j = (i + R) % N;
+            if (Book[Tar[j]] == false) continue;
+            nowcount++;
+            if (nowcount == Tar[j]) {
+                flag = 1;
+                Book[Tar[j]] = false;
+                count += Tar[j];
+                nowcount = 0;
+            }
+            if (R == N - 1) {
+                if (flag == 1) {
+                    flag = 0;
+                    R = -1;
+                }
+                else break;
+            }
+        }
+    }
+    if (count > maxl)maxl = count;
+    cout << maxl;
+    return 0;
+}

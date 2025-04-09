@@ -1,0 +1,26 @@
+#include <iostream>
+using namespace std;
+const int LO = 1e7;
+int arr[105];
+bool DP[LO];
+int main()
+{
+    int N, ans = 0;
+    cin >> N;
+    for (int i = 1; i <= N; i++) {
+        cin >> arr[i];
+        DP[arr[i]] = true;
+    }
+    for (int i = 1; i <= 1e7; i++) {
+        if (DP[i] == true) continue;
+        for (int j = 1; j <= N; j++) {
+            if (i - arr[j] < 0) continue;
+            DP[i] = (int)DP[i - arr[j]] + (int)DP[i];
+            if (DP[i] == true) break;
+        }
+        if (DP[i] == false) ans++;
+    }
+    if (ans > 10000) cout << "INF";
+    else cout << ans;
+    return 0;
+}

@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+int N;
+vector<int> Tar;
+int book[405];
+int North[30];
+int West[30];
+int north[30];
+int west[30];
+int tag = 0;
+void DFS(int nowx, int nowy, int end, int tag) {
+    if (tag == 1)return;
+    int locat[4][2] = { {1,0},{-1,0},{0,1},{0,-1} };
+    if (nowx == end && nowy == end) {
+        for (int i = 0; i < N; i++) {
+            if (North[i] != north[i] || west[i] != West[i]) {
+                return;
+            }
+        }
+        for (int& X : Tar) {
+            cout << X << " ";
+        }
+        tag = 1;
+        return;
+    }
+    for (int i = 0; i < 4; i++) {
+        int X = nowx + locat[i][0];
+        int Y = nowy + locat[i][1];
+        if (X < 0 || Y < 0 || X >= N || Y >= N || book[X * N + Y] == 1) continue;
+        if (north[Y] + 1 <= North[Y] && west[X] + 1 <= West[X]) {
+            north[Y]++;
+            west[X]++;
+            book[X * N + Y] = 1;
+            Tar.push_back(X * N + Y);
+            DFS(X, Y, end,tag);
+            Tar.pop_back();
+            book[X * N + Y] = 0;
+            north[Y]--;
+            west[X]--;
+        }
+    }
+}
+int main()
+{
+    cin >> N;
+    for (int i = 0; i < N; i++) cin >> North[i];
+    for (int i = 0; i < N; i++) cin >> West[i];
+    Tar.push_back(0);
+    book[0] = 1;
+    west[0]++;
+    north[0]++;
+    DFS(0, 0, N - 1,tag);
+    return 0;
+}
+//编号：X * N + Y

@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int k) {
+        sort(nums.begin(),nums.end());
+        for(int & X:nums){
+            if(X < k) return -1;
+        }
+        int count = 0;
+        int sizel = nums.size();
+        if(nums[0] != k) count++;
+        for(int i = 1;i < sizel;i++){
+            if(nums[i] != nums[i - 1]){
+                count++;
+            }
+        }
+        return count;
+    }
+};

@@ -1,0 +1,16 @@
+#include <iostream>
+#include <string>
+using namespace std;
+int main()
+{
+    int val;
+    string ans;
+    cin >> val;
+    while (val != 0) {
+        int temp = (val - 1) % 26;
+        ans.insert(ans.begin(), 'A' + temp);
+        val = (val - 1) / 26;
+    }
+    cout << ans;
+    return 0;
+}

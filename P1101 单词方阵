@@ -1,0 +1,117 @@
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <cmath>
+using namespace std;
+int n;
+string Map[105];
+string Target = "yizhong";
+bool Book[105][105];
+void Depth(int x,int y) {
+	int count = 0;
+	while ((y + count) < n && count < Target.size() && Map[x][y + count] == Target[count]) {
+		count++;
+	}
+	if (count == Target.size()) {
+		count = 0;
+		while ((y + count) < n && count < Target.size() && Map[x][y + count] == Target[count]) {
+			Book[x][y + count] = true;
+			count++;
+		}
+	}
+	count = 0;
+	while ((y - count) >= 0 && Target.size() > count && Map[x][y - count] == Target[count]) {
+		count++;
+	}
+	if (count == Target.size()) {
+		count = 0;
+		while ((y - count) >= 0 && Target.size() > count && Map[x][y - count] == Target[count]) {
+			Book[x][y - count] = true;
+			count++;
+		}
+	}
+	count = 0;
+	while ((x - count) > 0 && Target.size() > count && Map[x - count][y] == Target[count]) {
+		count++;
+	}
+	if (count == Target.size()) {
+		count = 0;
+		while ((x - count) > 0 && Target.size() > count && Map[x - count][y] == Target[count]) {
+			Book[x - count][y] = true;
+			count++;
+		}
+	}
+	count = 0;
+	while ((x + count) <= n && Target.size() > count && Map[x + count][y] == Target[count]) {
+		count++;
+	}
+	if (count == Target.size()) {
+		count = 0;
+		while ((x + count) <= n && Target.size() > count && Map[x + count][y] == Target[count]) {
+			Book[x + count][y] = true;
+			count++;
+		}
+	}
+	count = 0;
+	while ((y - count) > 0 && (x - count) > 0 && Target.size() > count && Map[x - count][y - count] == Target[count]) {
+		count++;
+	}
+	if (count == Target.size()) {
+		count = 0;
+		while ((y - count) > 0 && (x - count) > 0 && Target.size() > count && Map[x - count][y - count] == Target[count]) {
+			Book[x - count][y - count] = true;
+			count++;
+		}
+	}
+	count = 0;
+	while ((y - count) >= 0 && (x + count) <= n && Target.size() > count && Map[x + count][y - count] == Target[count]) {
+		count++;
+	}
+	if (count == Target.size()) {
+		count = 0;
+		while ((y - count) >= 0 && (x + count) <= n && Target.size() > count && Map[x + count][y - count] == Target[count]) {
+			Book[x + count][y - count] = true;
+			count++;
+		}
+	}
+	count = 0;
+	while ((y + count) < n && (x + count) <= n && Target.size() > count && Map[x + count][y + count] == Target[count]) {
+		count++;
+	}
+	if (count == Target.size()) {
+		count = 0;
+		while ((y + count) < n && (x + count) <= n && Target.size() > count && Map[x + count][y + count] == Target[count]) {
+			Book[x + count][y + count] = true;
+			count++;
+		}
+	}
+	count = 0;
+	while ((y + count) < n && (x - count) < 0 && Target.size() > count && Map[x - count][y + count] == Target[count]) {
+		count++;
+	}
+	if (count == Target.size()) {
+		count = 0;
+		while ((y + count) < n && (x - count) < 0 && Target.size() > count && Map[x - count][y + count] == Target[count]) {
+			Book[x - count][y + count] = true;
+			count++;
+		}
+	}
+}
+int main() {
+	cin >> n;
+	for (int i = 1; i <= n; i++) cin >> Map[i];
+	for (int i = 1; i <= n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (Map[i][j] == 'y') {
+				Depth(i, j);
+			}
+		}
+	}
+	for (int i = 1; i <= n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (Book[i][j] != true) Map[i][j] = '*';
+		}
+	}
+	for (int i = 1; i <= n; i++) cout << Map[i] << endl;
+	return 0;
+}

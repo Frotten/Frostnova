@@ -1,0 +1,28 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <string>
+#include <vector>
+using namespace std;
+int n;
+void Calculate(int rest, int last, string & temp) {
+	if (rest == 0)cout << temp << endl;
+	for (int i = last; i <= rest; i++) {
+		temp += '+';
+		char lo = i + '0';
+		temp += lo;
+		Calculate(rest - i, i, temp);
+		temp.erase(temp.end() - 2, temp.end());
+	}
+}
+int main() {
+	cin >> n;
+	int half = n / 2;
+	for (int i = 1; i <= half; i++) {
+		string temp;
+		char lo = i + '0';
+		temp += lo;
+		Calculate(n - i, i, temp);
+	}
+	return 0;
+}

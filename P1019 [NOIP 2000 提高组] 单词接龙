@@ -1,0 +1,40 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <cmath>
+#include <map>
+using namespace std;
+string Tar[22];
+int counts[22] = { 0 };
+int n;
+int ans = 0;
+void DFS(const string & temp) {
+	ans = max(ans, (int)temp.size());
+	for (int i = 1; i <= n; i++) {
+		if (counts[i] >= 2) continue;
+		for (int j = 1; j < min(temp.size(), Tar[i].size()); j++) {
+			if (temp.substr(temp.size() - j) == Tar[i].substr(0, j)) {
+				counts[i]++;
+				DFS(temp + Tar[i].substr(j));
+				counts[i]--;
+			}
+		}
+	}
+}
+int main(){
+	cin >> n;
+	for (int i = 1; i <= n; i++) {
+		cin >> Tar[i];
+	}
+	char Head;
+	cin >> Head;
+	for (int i = 1; i <= n; i++) {
+		if (Head == Tar[i][0]) {
+			counts[i]++;
+			DFS(Tar[i]);
+			counts[i]--;
+		}
+	}
+	cout << ans;
+	return 0;
+}

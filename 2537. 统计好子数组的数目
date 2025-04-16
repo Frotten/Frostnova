@@ -1,0 +1,22 @@
+class Solution {
+public:
+    long long countGood(vector<int>& nums, int k) {
+        long long ans = 0,same = 0;
+        int sizel = nums.size();
+        unordered_map<int,int> Tar;
+        int left = 0,right = -1;
+        for(left = 0;left < sizel - 1;left++){
+            while(same < k && right < sizel){
+                ++right;
+                same += Tar[nums[right]];
+                Tar[nums[right]]++;
+            }
+            if(same >= k){
+                ans += sizel - right;//一次性将left不变，right从当前位置加宽到sizel的所有子数组全部加上了（全部符合条件
+            }
+            Tar[nums[left]]--;
+            same -= Tar[nums[left]];
+        }
+        return ans;
+    }
+};

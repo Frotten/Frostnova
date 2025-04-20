@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int numRabbits(vector<int>& answers) {
+        unordered_map<int,int> Book;
+        int ans = 0;
+        for(int & X : answers){
+            Book[X]++;
+        }
+        for(auto & [x,y] : Book){
+            if(y <= (x + 1)){
+                ans += x + 1;
+            }
+            else{
+                while(y > 0){
+                    y -= x + 1;
+                    ans += x + 1;
+                }
+            }
+        }
+        return ans;
+    }
+};

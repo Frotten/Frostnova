@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <queue>
+#include <cmath>
+using namespace std;
+typedef struct Point {
+	int x;
+	int y;
+}Node;
+int countl = 0;
+int N, M;
+bool Book[102][102] = { false };
+char Map[105][105] = {0};
+int locat[8][2] = { {1,0},{-1,0},{0,1},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1} };
+int main() {
+	cin >> N >> M;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			cin >> Map[i][j];
+		}
+	}
+	queue<Node> Tar;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			if (Map[i][j] == 'W' && Book[i][j] == false) {
+				Book[i][j] = true;
+				Tar.push({ i,j });
+				while (!Tar.empty()) {
+					for (int k = 0; k <= 7; k++) {
+						int X = Tar.front().x + locat[k][0];
+						int Y = Tar.front().y + locat[k][1];
+						if (X < 0 || X >= N || Y < 0 || Y >= M || Map[X][Y] == '.' || Book[X][Y] == true)continue;
+						Tar.push({ X,Y });
+						Book[X][Y] = true;
+					}
+					Tar.pop();
+				}
+				countl++;
+			}
+		}
+	}
+	cout << countl;
+	return 0;
+}

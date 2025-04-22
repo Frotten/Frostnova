@@ -1,0 +1,25 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+int DP[1005][1005];
+int main() {
+	string Temp;
+	cin >> Temp;
+	int n = Temp.size();
+	string AntiTemp(Temp.rbegin(), Temp.rend());
+	Temp.insert(Temp.begin(), '0');
+	AntiTemp.insert(AntiTemp.begin(), '0');
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= n; j++) {
+			if (Temp[i] == AntiTemp[j]) {
+				DP[i][j] = DP[i - 1][j - 1] + 1;
+			}
+			else {
+				DP[i][j] = max(DP[i - 1][j], DP[i][j - 1]);
+			}
+		}
+	}
+	cout << n - DP[n][n];
+	return 0;
+}

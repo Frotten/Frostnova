@@ -6,28 +6,86 @@
 #include <string>
 #include <cstdio>
 using namespace std;
-long long ans = 0;
 int main() {
 	vector<int> Arr;
 	int n;
 	while (cin >> n) Arr.push_back(n);
 	n = Arr.size();
 	Arr.insert(Arr.begin(), -1);
-	vector<int> Bigger(n + 1, 0);
+	vector<int> Bigger;
 	for (int i = 1; i <= n; i++) {//构筑最长递减序列
-		int k = 1;
-		while (k <= ans && Bigger[k] >= Arr[i])k++;
-		if (k > ans) Bigger[++ans] = Arr[i];
-		else Bigger[k] = Arr[i];
+		int left = 0, right = Bigger.size();
+		while (left < right) {
+			int mid = (right + left) / 2;
+			if (Arr[i] > Bigger[mid]) {
+				right = mid;
+			}
+			else {
+				left = mid + 1;
+			}
+		}
+		if (left == Bigger.size()) {
+			Bigger.push_back(Arr[i]);
+		}
+		else {
+			Bigger[left] = Arr[i];
+		}
 	}
-	cout << ans << endl;
-	ans = 0;
-	for (int i = 1; i <= n; i++) {//最长增序列
-		int k = 1;
-		while (k <= ans && Bigger[k] < Arr[i])k++;
-		if (k > ans) Bigger[++ans] = Arr[i];
-		else Bigger[k] = Arr[i];
+	cout << Bigger.size() << endl;
+	Bigger.clear();
+	for (int i = 1; i <= n; i++) {//构筑最长递减序列
+		int left = 0, right = Bigger.size();
+		while (left < right) {
+			int mid = (right - left) / 2 + left;
+			if (Arr[i] <= Bigger[mid]) {
+				right = mid;
+			}
+			else {
+				left = mid + 1;
+			}
+		}
+		if (left == Bigger.size()) {
+			Bigger.push_back(Arr[i]);
+		}
+		else {
+			Bigger[left] = Arr[i];
+		}
 	}
-	cout << ans;
+	cout << Bigger.size();
 	return 0;
 }
+
+
+//#include <iostream>
+//#include <algorithm>
+//#include <cmath>
+//#include <vector>
+//#include <unordered_map>
+//#include <string>
+//#include <cstdio>
+//using namespace std;
+//long long ans = 0;
+//int main() {
+//	vector<int> Arr;
+//	int n;
+//	while (cin >> n) Arr.push_back(n);
+//	n = Arr.size();
+//	Arr.insert(Arr.begin(), -1);
+//	vector<int> Bigger(n + 1, 0);
+//	for (int i = 1; i <= n; i++) {//构筑最长递减序列
+//		int k = 1;
+//		while (k <= ans && Bigger[k] >= Arr[i])k++;
+//		if (k > ans) Bigger[++ans] = Arr[i];
+//		else Bigger[k] = Arr[i];
+//	}
+//	cout << ans << endl;
+//	ans = 0;
+//	for (int i = 1; i <= n; i++) {//最长增序列
+//		int k = 1;
+//		while (k <= ans && Bigger[k] < Arr[i])k++;
+//		if (k > ans) Bigger[++ans] = Arr[i];
+//		else Bigger[k] = Arr[i];
+//	}
+//	cout << ans;
+//	return 0;
+//}

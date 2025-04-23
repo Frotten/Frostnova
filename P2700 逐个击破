@@ -5,53 +5,54 @@
 #include <unordered_map>
 using namespace std;
 typedef struct ListNode {
-	int start;
-	int end;
-	int weight;
+        int start;
+        int end;
+        int weight;
 }Node;
 int compar(Node& A, Node& B) {
-	return A.weight > B.weight;
+        return A.weight > B.weight;
 }
 vector<Node> Tar;
 int FL[100005] = { 0 };
-int getf(int a) {
-	if (FL[a] != a) {
-		FL[a] = getf(FL[a]);
-	}
-	return FL[a];
+int getf(int a) {//并查集的求顶数
+        if (FL[a] != a) {
+                FL[a] = getf(FL[a]);
+        }
+        return FL[a];
 }
 int main() {
-	int N, K;
-	long long cost = 0;
-	long long Fee = 0;
-	cin >> N >> K;
-	for (int i = 0; i <= N; i++) FL[i] = i;
-	unordered_map<int, bool> Enemy;
-	for (int i = 0; i < K; i++) {
-		int temp;
-		cin >> temp;
-		Enemy[temp] = true;
-	}
-	for (int i = 1; i < N; i++) {
-		int A, B, C;
-		cin >> A >> B >> C;
-		Node TIML;
-		TIML.start = A;
-		TIML.end = B;
-		TIML.weight = C;
-		Tar.push_back(TIML);
-		cost += C;
-	}
-	sort(Tar.begin(), Tar.end(), compar);
-	for (Node& Tack : Tar) {
-		int ST = getf(Tack.start);
-		int EN = getf(Tack.end);
-		if (Enemy[ST] == false || Enemy[EN] == false) {
-			Fee += Tack.weight;
-			FL[ST] = EN;
-			Enemy[EN] = (Enemy[EN] || Enemy[ST]);
-		}
-	}
-	cout << cost - Fee;
-	return 0;
+        int N, K;
+        long long cost = 0;
+        long long Fee = 0;
+        cin >> N >> K;
+        for (int i = 0; i <= N; i++) FL[i] = i;
+        unordered_map<int, bool> Enemy;
+        for (int i = 0; i < K; i++) {
+                int temp;
+                cin >> temp;
+                Enemy[temp] = true;
+        }
+        for (int i = 1; i < N; i++) {
+                int A, B, C;
+                cin >> A >> B >> C;
+                Node TIML;
+                TIML.start = A;
+                TIML.end = B;
+                TIML.weight = C;
+                Tar.push_back(TIML);
+                cost += C;//cost拿来储存总权值
+        }
+        sort(Tar.begin(), Tar.end(), compar);//按权值从大到小排序
+        for (Node& Tack : Tar) {
+                int ST = getf(Tack.start);
+                int EN = getf(Tack.end);
+                if (Enemy[ST] == false || Enemy[EN] == false) {//如果ST和EN不全为被占领区域
+                        Fee += Tack.weight;//Fee表示连接未被占领区域的消耗
+                        FL[ST] = EN;//更新并查集，将ST和EN关联起来
+                        Enemy[EN] = (Enemy[EN] || Enemy[ST]);//如果EN或ST中有哪个区域和被占领区域
+                        //连接了，那么认为该区域已被占领（同一个区域块不能同时连接两个敌占区
+                }
+        }
+        cout << cost - Fee;
+        return 0;
 }

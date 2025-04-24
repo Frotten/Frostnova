@@ -1,0 +1,34 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <vector>
+#include <unordered_map>
+#include <string>
+using namespace std;
+typedef struct Attack {
+	int lose;
+	int win;
+	int use;
+}Node;
+int main() {
+	long long n, x;
+	cin >> n >> x;
+	vector<Node> Tar(n + 1);
+	for (int i = 1; i <= n; i++) {
+		cin >> Tar[i].lose >> Tar[i].win >> Tar[i].use;
+	}
+	vector<vector<int>> DP(n + 1, vector<int>(x + 1, 0));
+	for (int i = 1; i <= n; i++) {
+		for (int j = x; j >= 0; j--) {
+			if (j < Tar[i].use) {
+				DP[i][j] = DP[i - 1][j] + Tar[i].lose;
+			}
+			else {
+				DP[i][j] = max(DP[i - 1][j] + Tar[i].lose, DP[i - 1][j - Tar[i].use] + Tar[i].win);
+			}
+		}
+	}
+	long long Exp = (long long)DP[n][x] * 5;
+	cout << Exp;
+	return 0;
+}

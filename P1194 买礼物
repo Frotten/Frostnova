@@ -1,0 +1,55 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <vector>
+#include <unordered_map>
+#include <string>
+using namespace std;
+int Arr[505][505] = { 0 };
+int FL[1005];
+bool Book[1005];
+typedef struct Point {
+	int ST;
+	int EN;
+	int cost;
+}Node;
+int compar(Node& A, Node& B) {
+	return A.cost < B.cost;
+}
+int getf(int a) {
+	if (FL[a] != a) FL[a] = getf(FL[a]);
+	return FL[a];
+}
+int main() {
+	int A, B;
+	cin >> A >> B;
+	vector<Node> Fee;
+	long long sum = 0, lastcost = 0, countl = 0;
+	for (int i = 1; i <= B; i++) {
+		for (int j = 1; j <= B; j++) {
+			cin >> Arr[i][j];
+			if (Arr[i][j] != 0) {
+				Node Temp;
+				Temp.ST = i, Temp.EN = j, Temp.cost = Arr[i][j];
+				Fee.push_back(Temp);
+			}
+		}
+	}
+	for (int i = 1; i <= B; i++) {
+		Node Temp;
+		Temp.ST = 0,Temp.EN = i,Temp.cost = A;
+		Fee.push_back(Temp);
+	}
+	for (int i = 0; i <= B; i++) FL[i] = i;
+	sort(Fee.begin(), Fee.end(), compar);
+	for (Node & X: Fee) {
+		if (getf(X.ST) != getf(X.EN)) {
+			countl++;
+			sum += X.cost;
+			FL[getf(X.ST)] = getf(X.EN);
+		}
+		if (countl >= B) break;
+	}
+	cout << sum;
+	return 0;
+}

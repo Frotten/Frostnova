@@ -24,4 +24,13 @@ func main() {
 	}
 	sort.Sort(Byage(peopel))
 	fmt.Println("By name:", peopel)
+	people := []Person{
+		{"Alex", 18},
+		{"Blame", 16},
+		{"Nell", 19},
+	}
+	sort.Slice(people, func(i, j int) bool {
+		return people[i].Name < people[j].Name
+	})
+	fmt.Println("By name:", people)
 }
